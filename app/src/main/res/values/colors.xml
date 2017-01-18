@@ -2,5 +2,9 @@
 <resources>
     <color name="colorPrimary">#FF5252</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#FF5252</color>
+    <color name="colorGame">#558B2F</color>
+    <color name="colorSettings">#EF6C00</color>
+    <color name="colorFirends">#00838F</color>
+    <color name="colorQuestions">#283593</color>
 </resources>
