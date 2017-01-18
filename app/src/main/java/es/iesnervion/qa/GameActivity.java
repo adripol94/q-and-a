@@ -23,12 +23,9 @@ public class GameActivity extends AppCompatActivity {
         juego.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Animation clicked = AnimationUtils.loadAnimation(v.getContext(), android.R.anim.slide_out_right);
-                clicked.reset();
                 Animation disppear = AnimationUtils.loadAnimation(v.getContext(), android.R.anim.fade_out);
                 disppear.reset();
                 juego.clearAnimation();
-                juego.setAnimation(clicked);
                 setting.clearAnimation();
                 setting.setAnimation(disppear);
                 friends.clearAnimation();
@@ -45,9 +42,5 @@ public class GameActivity extends AppCompatActivity {
 
         questions = (TextView) findViewById(R.id.txtRealizarPreguntas);
     }
-
-        /**
-         * On Clicks Secction!!!!
-         */
 
 }
