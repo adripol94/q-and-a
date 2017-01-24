@@ -6,12 +6,26 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="es.iesnervion.qa.View.GameList"
-    tools:showIn="@layout/activity_game_list">
+    tools:showIn="@layout/activity_game_list"
+    android:fillViewport="true">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:id="@+id/backButton"
-        android:text="@string/backButton" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtClicks"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:id="@+id/backButton"
+            android:text="@string/backButton" />
+
+    </RelativeLayout>
+
 </android.support.v4.widget.NestedScrollView>

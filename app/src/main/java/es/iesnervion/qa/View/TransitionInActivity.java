@@ -73,12 +73,5 @@ public class TransitionInActivity extends BaseActivity {
         if (actionBar != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    /*
-    Para cancelar la actividad
-    */
-     @OnClick(R.id.backButton)
-    public void onCloseTextClicked() {
-        finishAfterTransition();
-    }
 }
 

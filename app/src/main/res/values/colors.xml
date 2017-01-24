@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FF5252</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF5252</color>
+    <color name="colorPrimary">#1976D2</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#fff</color>
+    <color name="colorBackground">#EEEEEE</color>
     <!-- Colores de los botones pagina principal -->
 
     <color name="colorGame">#558B2F</color>
