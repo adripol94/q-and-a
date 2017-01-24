@@ -1,4 +1,4 @@
-package es.iesnervion.qa;
+package es.iesnervion.qa.View;
 
 import android.animation.Animator;
 import android.animation.ArgbEvaluator;

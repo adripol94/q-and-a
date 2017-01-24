@@ -1,9 +1,8 @@
-package es.iesnervion.qa;
+package es.iesnervion.qa.View;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -33,6 +32,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import es.iesnervion.qa.R;
 
 import static android.Manifest.permission.READ_CONTACTS;
 

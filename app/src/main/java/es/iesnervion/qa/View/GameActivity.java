@@ -1,10 +1,12 @@
-package es.iesnervion.qa;
+package es.iesnervion.qa.View;
 
-
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import es.iesnervion.qa.R;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -13,17 +15,16 @@ public class GameActivity extends AppCompatActivity {
     public TextView friends;
     public TextView questions;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-
         juego = (TextView) findViewById(R.id.txtJuego);
         juego.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Hacerlo con trasicciones
+                Intent it = new Intent(GameActivity.this, GameList.class);
+                startActivity(it);
              }
         });
 
@@ -33,6 +34,4 @@ public class GameActivity extends AppCompatActivity {
 
         questions = (TextView) findViewById(R.id.txtRealizarPreguntas);
     }
-
-
 }

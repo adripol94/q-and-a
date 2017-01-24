@@ -3,8 +3,10 @@
     <color name="colorPrimary">#FF5252</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF5252</color>
+    <!-- Colores de los botones pagina principal -->
+
     <color name="colorGame">#558B2F</color>
-    <color name="colorSettings">#EF6C00</color>
-    <color name="colorFirends">#00838F</color>
-    <color name="colorQuestions">#283593</color>
+    <color name="colorSettings">#f9a825</color>
+    <color name="colorFirends">#1565c0</color>
+    <color name="colorQuestions">#c62828</color>
 </resources>

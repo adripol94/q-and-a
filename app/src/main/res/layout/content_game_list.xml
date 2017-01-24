@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="es.iesnervion.qa.GameList"
+    tools:context="es.iesnervion.qa.View.GameList"
     tools:showIn="@layout/activity_game_list">
 
     <TextView
