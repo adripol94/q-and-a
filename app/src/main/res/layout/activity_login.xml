@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/loginId"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal"
     android:orientation="vertical"
@@ -21,25 +22,20 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
-    <!-- Por hacer: Esconder la imagen como en facebook -->
-    <ScrollView
-        android:id="@+id/login_form"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <LinearLayout
-            android:id="@+id/email_login_form"
+            android:id="@+id/login_form"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:weightSum="1">
 
             <ImageView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/logo"
-                android:background="@drawable/logo"
-                android:adjustViewBounds="false"
+                android:maxHeight="300dp"
+                android:src="@drawable/logo_big"
+                android:adjustViewBounds="true"
                 android:layout_gravity="center"/>
 
             <android.support.design.widget.TextInputLayout
@@ -81,10 +77,10 @@
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
                 android:layout_marginTop="16dp"
                 android:text="@string/action_sign_in"
                 android:textStyle="bold" />
 
         </LinearLayout>
-    </ScrollView>
 </LinearLayout>
