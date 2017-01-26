@@ -80,6 +80,12 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
     public void onBindViewHolder(CategoriaAdapter.ViewHolder holder, int position) {
         holder.getTv().setText(categorias[position].getCategoria());
         //FIXME holder.getCv().setBackgroundResource();
+        holder.getCv().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace this", Snackbar.LENGTH_LONG).show();
+            }
+        });
     }
 
     /**
