@@ -1,4 +1,4 @@
-package es.iesnervion.qa.View;
+package es.iesnervion.qa.ui.View;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

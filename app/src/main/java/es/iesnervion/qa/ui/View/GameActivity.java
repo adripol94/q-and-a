@@ -1,4 +1,4 @@
-package es.iesnervion.qa.View;
+package es.iesnervion.qa.ui.View;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -9,8 +9,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import es.iesnervion.qa.R;
-
-import static android.R.attr.delay;
+import es.iesnervion.qa.ui.Transitions.TransitionInActivity;
 
 public class GameActivity extends AppCompatActivity {
 

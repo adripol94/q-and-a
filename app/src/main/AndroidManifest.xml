@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".View.LoginActivity"
+            android:name=".ui.View.LoginActivity"
             android:windowSoftInputMode="adjustResize"
             android:label="@string/app_name">
             <intent-filter>
@@ -24,14 +24,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".View.GameActivity"
+            android:name=".ui.View.GameActivity"
             android:screenOrientation="locked">
             <item android:name="android:typeface">
                 serif
             </item>
         </activity>
         <activity
-            android:name=".View.GameList"
+            android:name=".ui.View.GameList"
             android:label="@string/title_activity_game_list"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

@@ -1,4 +1,4 @@
-package es.iesnervion.qa.View;
+package es.iesnervion.qa.ui.Transitions;
 
 /**
  * Created by apol on 24/01/17.
@@ -12,8 +12,8 @@ import android.transition.TransitionInflater;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import es.iesnervion.qa.R;
+import es.iesnervion.qa.ui.View.BaseActivity;
 
 public class TransitionInActivity extends BaseActivity {
 

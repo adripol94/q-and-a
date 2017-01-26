@@ -1,4 +1,4 @@
-package es.iesnervion.qa.View;
+package es.iesnervion.qa.ui.View;
 
 import android.content.res.ColorStateList;
 import android.media.MediaPlayer;
@@ -8,24 +8,35 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import es.iesnervion.qa.Model.Categoria;
 import es.iesnervion.qa.R;
+import es.iesnervion.qa.ui.Adapter.CategoriaAdapter;
 
 public class GameList extends AppCompatActivity {
 
-    public int iClicks = 0;
+    private int iClicks = 0;
+    private List<Categoria> categorias;
+    private MediaPlayer mp;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_list);
+        CategoriaAdapter mCategoryAdapter;
+        RecyclerView mRecyclerView = (RecyclerView)findViewById(R.id.rvCategorias);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -47,7 +58,7 @@ public class GameList extends AppCompatActivity {
             }
         });
 
-        MediaPlayer mp = MediaPlayer.create(GameList.this, R.raw.music);
+        mp = MediaPlayer.create(GameList.this, R.raw.music);
         mp.start();
 
         Timer timer = new Timer();
@@ -65,5 +76,22 @@ public class GameList extends AppCompatActivity {
                 });
             }
         }, 0, 100);
+
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+
+        //TODO Dummy -> Replace that
+        Categoria[] c = {
+          new Categoria(1, "Ciencias")
+        };
+
+        mCategoryAdapter = new CategoriaAdapter(c);
+        mRecyclerView.setAdapter(mCategoryAdapter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mp.stop();
     }
 }
