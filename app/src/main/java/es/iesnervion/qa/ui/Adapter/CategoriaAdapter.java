@@ -49,7 +49,7 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
     @Override
     public CategoriaAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.template_categorias, parent, false);
+                .inflate(R.layout.template_categories, parent, false);
 
         ViewHolder vh = new ViewHolder(v, R.id.template_categoria_categoria_txt,
                 R.id.template_categoria_categoria_cv);
@@ -109,7 +109,7 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
         //FIXME Implementation {@link OnClickListener} error not working!
 
         /**
-         * ViewHolder responsable del {@see RecyclerView} de {@link R.layout#template_categorias}.
+         * ViewHolder responsable del {@see RecyclerView} de {@link R.layout#template_categories}.
          * @param itemView Vista
          * @param idCategoriaTxt id del {@link android.widget.TextView}
          * @param idCategoriaCardView id del {@link android.support.v7.widget.CardView}

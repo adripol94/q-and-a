@@ -8,7 +8,6 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -23,7 +22,7 @@ import es.iesnervion.qa.Model.Categoria;
 import es.iesnervion.qa.R;
 import es.iesnervion.qa.ui.Adapter.CategoriaAdapter;
 
-public class GameList extends AppCompatActivity {
+public class CategoriesActivity extends AppCompatActivity {
 
     private int iClicks = 0;
     private List<Categoria> categorias;
@@ -33,13 +32,14 @@ public class GameList extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_list);
+        setContentView(R.layout.activity_categories_game);
         CategoriaAdapter mCategoryAdapter;
         RecyclerView mRecyclerView = (RecyclerView)findViewById(R.id.rvCategorias);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Start Flating button...
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorQuestions)));
         fab.setOnClickListener(new View.OnClickListener() {
@@ -49,6 +49,8 @@ public class GameList extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        //Back TextView...
         TextView tx = (TextView) findViewById(R.id.backButton);
         tx.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,7 +60,8 @@ public class GameList extends AppCompatActivity {
             }
         });
 
-        mp = MediaPlayer.create(GameList.this, R.raw.music);
+        /** Datos de prueba **/ //TODO DELETE THAT.
+        mp = MediaPlayer.create(CategoriesActivity.this, R.raw.music);
         mp.start();
 
         Timer timer = new Timer();

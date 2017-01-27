@@ -11,7 +11,7 @@ import android.widget.TextView;
 import es.iesnervion.qa.R;
 import es.iesnervion.qa.ui.Transitions.TransitionInActivity;
 
-public class GameActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity {
 
     public TextView juego;
     public TextView setting;
@@ -21,7 +21,7 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
+        setContentView(R.layout.activity_menu);
         juego = (TextView) findViewById(R.id.txtJuego);
         juego.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -29,7 +29,7 @@ public class GameActivity extends AppCompatActivity {
                 juego.startAnimation(AnimationUtils.loadAnimation(
                         v.getContext(), android.R.anim.fade_out));
 
-                Intent it = new Intent(GameActivity.this, GameList.class);
+                Intent it = new Intent(MenuActivity.this, CategoriesActivity.class);
                 it.putExtra(TransitionInActivity.EXTRA_TRANSITION, TransitionInActivity.TRANSITION_EXPLODE);
                 startActivityWithOptions(it);
 
@@ -45,7 +45,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void startActivityWithOptions(Intent intent) {
         ActivityOptions transitionActivity =
-                ActivityOptions.makeSceneTransitionAnimation(GameActivity.this);
+                ActivityOptions.makeSceneTransitionAnimation(MenuActivity.this);
         startActivity(intent, transitionActivity.toBundle());
     }
 }

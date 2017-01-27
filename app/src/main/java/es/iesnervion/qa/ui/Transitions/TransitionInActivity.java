@@ -31,7 +31,7 @@ public class TransitionInActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_list);
+        setContentView(R.layout.activity_categories_game);
         ButterKnife.bind(this);
 
         String transition = getIntent().getStringExtra(EXTRA_TRANSITION);
