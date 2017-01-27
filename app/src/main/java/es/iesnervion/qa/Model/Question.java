@@ -7,30 +7,24 @@ import java.util.ArrayList;
  * se utilizaran el posicionamiento como estrategia para conocer la respuesta correecta.
  * Created by apol on 24/01/17.
  */
-// Tambien es posible con una matriz.
-public class Question {
+//TODO Preguntar a Miguel si es mejor con un Objeto de atributo o que herede de este...
+public class Question extends Categoria {
     private String question;
-    private String correctAnswer;
-    private String[] incorrectAnswer;
+    private ArrayList<Answer> answers;
 
     public Question() {
     }
 
-    public Question(String question, String correctAnswer, String[] incorrectAnswer) {
+    public Question(String question, ArrayList<Answer> answer) {
         this.question = question;
-        this.correctAnswer = correctAnswer;
-        this.incorrectAnswer = incorrectAnswer;
+        this.answers = answer;
     }
 
     public String getQuestion() {
         return question;
     }
 
-    public String getCorrectAnswer() {
-        return correctAnswer;
-    }
-
-    public String[] getIncorrectAnswer() {
-        return incorrectAnswer;
+    public ArrayList<Answer> getAnswer() {
+        return answers;
     }
 }
