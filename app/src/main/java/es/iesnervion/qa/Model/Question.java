@@ -9,41 +9,28 @@ import java.util.ArrayList;
  */
 // Tambien es posible con una matriz.
 public class Question {
-    private String pregunta;
-    private ArrayList<String> respuestas;
-    int posRespuestaCorrecta;
+    private String question;
+    private String correctAnswer;
+    private String[] incorrectAnswer;
 
     public Question() {
-
     }
 
-    public Question(String pregunta, ArrayList<String> respuestas, int posRespuestaCorrecta) {
-        this.pregunta = pregunta;
-        this.respuestas = respuestas;
-        this.posRespuestaCorrecta = posRespuestaCorrecta;
+    public Question(String question, String correctAnswer, String[] incorrectAnswer) {
+        this.question = question;
+        this.correctAnswer = correctAnswer;
+        this.incorrectAnswer = incorrectAnswer;
     }
 
-    public String getPregunta() {
-        return pregunta;
+    public String getQuestion() {
+        return question;
     }
 
-    public void setPregunta(String pregunta) {
-        this.pregunta = pregunta;
+    public String getCorrectAnswer() {
+        return correctAnswer;
     }
 
-    public ArrayList<String> getRespuestas() {
-        return respuestas;
-    }
-
-    public void setRespuestas(ArrayList<String> respuestas) {
-        this.respuestas = respuestas;
-    }
-
-    public int getPosRespuestaCorrecta() {
-        return posRespuestaCorrecta;
-    }
-
-    public void setPosRespuestaCorrecta(int posRespuestaCorrecta) {
-        this.posRespuestaCorrecta = posRespuestaCorrecta;
+    public String[] getIncorrectAnswer() {
+        return incorrectAnswer;
     }
 }
