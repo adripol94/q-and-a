@@ -24,9 +24,7 @@ import es.iesnervion.qa.ui.Adapter.CategoriaAdapter;
 
 public class CategoriesActivity extends AppCompatActivity {
 
-    private int iClicks = 0;
     private List<Categoria> categorias;
-    private MediaPlayer mp;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -60,29 +58,6 @@ public class CategoriesActivity extends AppCompatActivity {
             }
         });
 
-        /** Datos de prueba **/ //TODO DELETE THAT.
-        mp = MediaPlayer.create(CategoriesActivity.this, R.raw.music);
-        mp.start();
-
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        TextView txtClicks = (TextView) findViewById(R.id.txtClicks);
-                        // task to be done every 1000 milliseconds
-                        iClicks = iClicks + 1;
-                        txtClicks.setText(String.valueOf(iClicks));
-                    }
-                });
-            }
-        }, 0, 100);
-
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
-
         //TODO Dummy -> Replace that
         Categoria[] c = {
           new Categoria(1, "Ciencias")
@@ -90,11 +65,5 @@ public class CategoriesActivity extends AppCompatActivity {
 
         mCategoryAdapter = new CategoriaAdapter(c);
         mRecyclerView.setAdapter(mCategoryAdapter);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mp.stop();
     }
 }
