@@ -6,14 +6,14 @@ package es.iesnervion.qa.Model;
 
 //TODO Preguntar a Miguel si es mejor un atributo preguntas o si una vez seleccionada la categoria
 // hacer un selecet con el nombre de la categoria o con el id.
-public class Categoria {
+public class Category {
     private int id;
     private String categoria;
 
-    public Categoria() {
+    public Category() {
     }
 
-    public Categoria(int id, String categoria) {
+    public Category(int id, String categoria) {
         this.id = id;
         this.categoria = categoria;
     }

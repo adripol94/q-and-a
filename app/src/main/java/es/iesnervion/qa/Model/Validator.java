@@ -7,5 +7,13 @@ package es.iesnervion.qa.Model;
 /**
  * Clase principal para la validacion de las repuestas.
  */
-public class Play {
+public class Validator {
+
+    public static boolean validate(int id) {
+
+        //TODO
+
+        return false;
+    }
+
 }

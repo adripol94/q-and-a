@@ -1,7 +1,6 @@
 package es.iesnervion.qa.ui.Adapter;
 
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,21 +8,20 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.List;
-
-import es.iesnervion.qa.Model.Category;
+import es.iesnervion.qa.Model.Answer;
 import es.iesnervion.qa.R;
 
+import static es.iesnervion.qa.R.layout.template_gaming;
+
 /**
- * Created by adripol94 on 1/26/17.
+ * Created by adripol94 on 1/28/17.
  */
 
-public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.ViewHolder> {
+public class GamingAdapter extends RecyclerView.Adapter<GamingAdapter.ViewHolder> {
+    private Answer[] answers;
 
-    private Category[] categories;
-
-    public CategoriaAdapter(Category[] categories) {
-        this.categories = categories;
+    public GamingAdapter(Answer[] answers) {
+        this.answers = answers;
     }
 
     /**
@@ -35,7 +33,7 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
      * layout file.
      * <p>
      * The new ViewHolder will be used to display items of the adapter using
-     * {@link (ViewHolder, int, List)}. Since it will be re-used to display
+     * . Since it will be re-used to display
      * different items in the data set, it is a good idea to cache references to sub views of
      * the View to avoid unnecessary {@link View#findViewById(int)} calls.
      *
@@ -47,12 +45,12 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
      * @see #onBindViewHolder(ViewHolder, int)
      */
     @Override
-    public CategoriaAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.template_categories, parent, false);
+    public GamingAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        //Creating view
+        View v = LayoutInflater.from(parent.getContext()).inflate(template_gaming, parent, false);
 
-        ViewHolder vh = new ViewHolder(v, R.id.template_categoria_categoria_txt,
-                R.id.template_categoria_categoria_cv);
+        ViewHolder vh = new ViewHolder(v, R.id.answer_gaming_tv);
+
         return vh;
     }
 
@@ -69,7 +67,7 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
      * on (e.g. in a click listener), use {@link ViewHolder#getAdapterPosition()} which will
      * have the updated adapter position.
      * <p>
-     * Override {@link (ViewHolder, int, List)} instead if Adapter can
+     * Override  instead if Adapter can
      * handle efficient partial bind.
      *
      * @param holder   The ViewHolder which should be updated to represent the contents of the
@@ -77,13 +75,13 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
      * @param position The position of the item within the adapter's data set.
      */
     @Override
-    public void onBindViewHolder(CategoriaAdapter.ViewHolder holder, int position) {
-        holder.getTv().setText(categories[position].getCategoria());
-        //FIXME holder.getCv().setBackgroundResource();
-        holder.getCv().setOnClickListener(new View.OnClickListener() {
+    public void onBindViewHolder(GamingAdapter.ViewHolder holder, int position) {
+        holder.getAnswerGaming().setText(this.answers[position].getAnswer());
+        //FIXME Replae when fix bug #5 // STOPSHIP: 1/28/17 see CategoryAdapter
+        holder.getAnswerGaming().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace this", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(view, "Replace for action", Snackbar.LENGTH_LONG).show();
             }
         });
     }
@@ -95,45 +93,19 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
      */
     @Override
     public int getItemCount() {
-        return categories.length;
+        return answers.length;
     }
 
-    /**
-     * Clase ViewHolder.
-     * Extiende de {@link RecyclerView.ViewHolder} y implementa {@link View.OnClickListener}
-     */
-    public class ViewHolder extends RecyclerView.ViewHolder {  //implements View.OnClickListener{
-        private TextView tv;
-        private CardView cv;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private TextView answerGaming;
 
-        //FIXME Implementation {@link OnClickListener} error not working!
-
-        /**
-         * ViewHolder responsable del {@see RecyclerView} de {@link R.layout#template_categories}.
-         * @param itemView Vista
-         * @param idCategoriaTxt id del {@link android.widget.TextView}
-         * @param idCategoriaCardView id del {@link android.support.v7.widget.CardView}
-         */
-        public ViewHolder(View itemView, int idCategoriaTxt, int idCategoriaCardView) {
+        public ViewHolder(View itemView, int idAnswerGaming) {
             super(itemView);
-            tv = (TextView)itemView.findViewById(idCategoriaTxt);
-            cv = (CardView)itemView.findViewById(idCategoriaCardView);
-            //itemView.setOnClickListener(this);
+            answerGaming = (TextView)itemView.findViewById(idAnswerGaming);
         }
 
-        public TextView getTv() {
-            return tv;
+        public TextView getAnswerGaming() {
+            return answerGaming;
         }
-
-        public CardView getCv() {
-            return cv;
-        }
-
-
-        /*@Override
-        public void onClick(View view) {
-            Snackbar.make(view, "Replace for StartActivity", Snackbar.LENGTH_LONG).show();
-        }
-        */
     }
 }

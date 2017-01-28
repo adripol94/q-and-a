@@ -1,6 +1,6 @@
 package es.iesnervion.qa.DAL;
 
-import es.iesnervion.qa.Model.Categoria;
+import es.iesnervion.qa.Model.Category;
 
 /**
  * Created by apol on 27/01/17.
@@ -10,9 +10,9 @@ public class Connection {
 
     /**
      * Devuelve todas las categorias disponibles en la API
-     * @return Categoria array
+     * @return Category array
      */
-    public static Categoria[] getCategorias() {
+    public static Category[] getCategorias() {
 
 
         return null;

@@ -1,6 +1,8 @@
 package es.iesnervion.qa.ui.View;
 
 import android.media.MediaPlayer;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.ListFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -8,9 +10,11 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import es.iesnervion.qa.Model.ListQuestionFragment;
+import es.iesnervion.qa.Model.Question;
 import es.iesnervion.qa.R;
 
-public class GamingActivity extends AppCompatActivity {
+public class GamingActivity extends FragmentActivity {
     private MediaPlayer mediaPlayer;
     private int iClicks = 0;
     private static final String CLICK_VALUE = "click_value";
@@ -40,6 +44,34 @@ public class GamingActivity extends AppCompatActivity {
                 });
             }
         }, 0, 100);
+
+        //Adapter for answer
+        //https://github.com/adripol94/Android/blob/master/Ejercicio5.2/app/src/main/java/es/iesnervion/ejercicio52/MainActivity.java
+        //TODO get Questions
+        Question[] q = new Question[5];
+
+        try {
+            //IDEA rellenar con la capa DAL el array de Questions y inflar el fragment tantas preguntas tenga el array.
+            // para ello hasta que el usuario no haga click no se volverá a calgar el otro layout.
+            //TODO Puede que se tenga que hacer en hilos.
+
+            for (int i = 0; i < q.length; i++) {
+                ListQuestionFragment list = new ListQuestionFragment().newInstance(q[i]);
+
+                // Hereda setArguments desde Fragment
+                list.setArguments(getIntent().getExtras());
+
+                // Con FragmentManager podremos interactuar entre el fragment_movil y la clase list
+                // gracias a esto pondremos todos las propiedades preparada de ese
+                // fragment en el fragment
+                getSupportFragmentManager().beginTransaction().add(R.id.frame_gammingActivity, list)
+                        .commit();
+            }
+        } catch (ClassCastException e) {
+            //TODO change that
+            e.printStackTrace();
+        }
+
     }
 
     @Override
