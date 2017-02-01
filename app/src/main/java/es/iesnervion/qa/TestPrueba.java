@@ -8,6 +8,7 @@ import android.widget.ProgressBar;
 
 import java.util.List;
 
+import es.iesnervion.qa.Model.CallBackProgress;
 import es.iesnervion.qa.Model.Question;
 import es.iesnervion.qa.Model.Responser;
 import es.iesnervion.qa.Model.RetrofitControler;
@@ -25,7 +26,9 @@ public class TestPrueba extends AppCompatActivity implements Responser {
 
         RetrofitControler r = new RetrofitControler("http://api.qanda.dev/");
         Call<List<Question>> listQuestion = r.getListQuestion("Basic YWRyaXBvbDk0QGdtYWlsLmNvbToxMjM=");
+        listQuestion.enqueue(new CallBackProgress(this));
 
+        progressBar.animate().start();
     }
 
 
