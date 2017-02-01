@@ -1,5 +1,6 @@
 package es.iesnervion.qa.ui.View;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,8 +40,8 @@ public class CategoriesActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent it = new Intent(CategoriesActivity.this, GamingActivity.class);
+                startActivity(it);
             }
         });
 

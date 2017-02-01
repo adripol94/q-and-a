@@ -1,25 +1,39 @@
 package es.iesnervion.qa.ui.View;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import es.iesnervion.qa.Model.Category;
 import es.iesnervion.qa.Model.ListQuestionFragment;
 import es.iesnervion.qa.Model.Question;
+import es.iesnervion.qa.Model.RetrofitControler;
 import es.iesnervion.qa.R;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class GamingActivity extends FragmentActivity {
     private MediaPlayer mediaPlayer;
     private int iClicks = 0;
     private static final String CLICK_VALUE = "click_value";
     private TextView txtClicks;
+    private View mProgressView;
 
 
     @Override
@@ -29,6 +43,9 @@ public class GamingActivity extends FragmentActivity {
 
         mediaPlayer = MediaPlayer.create(this, R.raw.music);
         txtClicks = (TextView) findViewById(R.id.clock_gaming_tv);
+        mProgressView = findViewById(R.id.login_progress);
+
+
 
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -49,6 +66,15 @@ public class GamingActivity extends FragmentActivity {
         //Adapter for answer
         //https://github.com/adripol94/Android/blob/master/Ejercicio5.2/app/src/main/java/es/iesnervion/ejercicio52/MainActivity.java
         //TODO get Questions
+        RetrofitControler r = new RetrofitControler("http://api.qanda.dev/");
+        Call<List<Question>> listQuestion = r.getListQuestion("Basic YWRyaXBvbDk0QGdtYWlsLmNvbToxMjM=");
+
+        try {
+            List<Question> list = listQuestion.execute().body();
+        } catch (Exception e) {
+            Snackbar.make(getCurrentFocus(), e.getMessage(), Snackbar.LENGTH_LONG).show();
+        }
+
         Question[] q = new Question[5];
 
         try {

@@ -1,5 +1,8 @@
 package es.iesnervion.qa.Model;
 
+import java.util.List;
+
+import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -9,6 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitControler {
     private static String NAME_SERVER = "api.apol.ciclo.iesnervion.es";
+    private RetrofitInterfaceQA service;
     private Retrofit retrofit;
 
     public RetrofitControler() {
@@ -16,6 +20,7 @@ public class RetrofitControler {
                 .baseUrl(NAME_SERVER)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+        service = retrofit.create(RetrofitInterfaceQA.class);
     }
 
     public RetrofitControler(String url) {
@@ -23,9 +28,14 @@ public class RetrofitControler {
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
+        service = retrofit.create(RetrofitInterfaceQA.class);
     }
 
+    public Call<List<Question>> getListQuestion(String header) {
+        Call<List<Question>> questions = service.lisQuestions(header);
+
+        return questions;
+    }
 
 
 }
