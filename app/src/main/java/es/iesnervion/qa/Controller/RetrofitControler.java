@@ -1,10 +1,13 @@
-package es.iesnervion.qa.Model;
+package es.iesnervion.qa.Controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
+import es.iesnervion.qa.Model.Category;
+import es.iesnervion.qa.Model.Question;
+import es.iesnervion.qa.Model.RetrofitInterfaceQA;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -14,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class RetrofitControler {
-    private static String NAME_SERVER = "api.apol.ciclo.iesnervion.es";
+    private static String NAME_SERVER = "https://api.apol.ciclo.iesnervion.es/index.php/";
     private RetrofitInterfaceQA service;
     private Retrofit retrofit;
 
@@ -51,5 +54,9 @@ public class RetrofitControler {
         return questions;
     }
 
+    public Call<List<Category>> getListCategory(String token) {
+        Call<List<Category>> categories = service.listCategory(token);
 
+        return categories;
+    }
 }

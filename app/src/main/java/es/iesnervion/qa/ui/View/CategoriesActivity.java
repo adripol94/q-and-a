@@ -11,25 +11,30 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
+import es.iesnervion.qa.Controller.RetrofitControler;
+import es.iesnervion.qa.Model.CallBackProgress;
 import es.iesnervion.qa.Model.Category;
+import es.iesnervion.qa.Model.Responser;
 import es.iesnervion.qa.R;
 import es.iesnervion.qa.ui.Adapter.CategoriaAdapter;
+import retrofit2.Call;
 
-public class CategoriesActivity extends AppCompatActivity {
+public class CategoriesActivity extends AppCompatActivity implements Responser<List<Category>> {
 
     private List<Category> categories;
+    private RetrofitControler retrofitControler;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories_game);
-        CategoriaAdapter mCategoryAdapter;
-        RecyclerView mRecyclerView = (RecyclerView)findViewById(R.id.rvCategorias);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -55,12 +60,28 @@ public class CategoriesActivity extends AppCompatActivity {
             }
         });
 
-        //TODO Dummy -> Replace that
-        Category[] c = {
-          new Category(1, "Ciencias")
-        };
+        retrofitControler = new RetrofitControler();
+        Call<List<Category>> categCall = retrofitControler.getListCategory("Basic YWRyaXBvbDk0QGdtYWlsLmNvbToxMjM=");
+        categCall.enqueue(new CallBackProgress<List<Category>>(this));
 
-        mCategoryAdapter = new CategoriaAdapter(c);
+
+
+    }
+
+    @Override
+    public void onFinish(List<Category> obj, String bearer) {
+        (findViewById(R.id.progressBarCategory)).setVisibility(View.GONE);
+
+        categories = obj;
+        CategoriaAdapter mCategoryAdapter;
+        RecyclerView mRecyclerView = (RecyclerView)findViewById(R.id.rvCategorias);
+
+        mCategoryAdapter = new CategoriaAdapter(categories);
         mRecyclerView.setAdapter(mCategoryAdapter);
+    }
+
+    @Override
+    public void onFailure(Throwable t) {
+
     }
 }

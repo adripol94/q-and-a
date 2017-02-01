@@ -1,32 +1,17 @@
 package es.iesnervion.qa.ui.View;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.media.MediaPlayer;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.ListFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import es.iesnervion.qa.Model.Category;
 import es.iesnervion.qa.Model.ListQuestionFragment;
 import es.iesnervion.qa.Model.Question;
-import es.iesnervion.qa.Model.RetrofitControler;
 import es.iesnervion.qa.R;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class GamingActivity extends FragmentActivity {
     private MediaPlayer mediaPlayer;

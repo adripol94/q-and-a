@@ -20,9 +20,9 @@ import es.iesnervion.qa.R;
 
 public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.ViewHolder> {
 
-    private Category[] categories;
+    private List<Category> categories;
 
-    public CategoriaAdapter(Category[] categories) {
+    public CategoriaAdapter(List<Category> categories) {
         this.categories = categories;
     }
 
@@ -78,7 +78,7 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
      */
     @Override
     public void onBindViewHolder(CategoriaAdapter.ViewHolder holder, int position) {
-        holder.getTv().setText(categories[position].getCategoria());
+        holder.getTv().setText(categories.get(position).getName());
         //FIXME holder.getCv().setBackgroundResource();
         holder.getCv().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +95,7 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
      */
     @Override
     public int getItemCount() {
-        return categories.length;
+        return categories.size();
     }
 
     /**

@@ -5,5 +5,6 @@ package es.iesnervion.qa.Model;
  */
 
 public interface Responser<T> {
-    void terminado(T obj, String bearer);
+    void onFinish(T obj, String bearer);
+    void onFailure(Throwable t);
 }
