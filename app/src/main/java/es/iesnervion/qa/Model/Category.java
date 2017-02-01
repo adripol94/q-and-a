@@ -10,6 +10,7 @@ import android.os.Parcelable;
 //TODO Preguntar a Miguel si es mejor un atributo preguntas o si una vez seleccionada la name
 // hacer un selecet con el nombre de la name o con el id.
 public class Category implements Parcelable {
+    public static String CATEGORY_KEY = "category";
     private int id;
     private String name;
 

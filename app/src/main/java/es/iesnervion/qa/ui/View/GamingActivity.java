@@ -1,19 +1,26 @@
 package es.iesnervion.qa.ui.View;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import es.iesnervion.qa.Controller.RetrofitControler;
+import es.iesnervion.qa.Model.CallBackProgress;
+import es.iesnervion.qa.Model.Category;
 import es.iesnervion.qa.Model.ListQuestionFragment;
 import es.iesnervion.qa.Model.Question;
+import es.iesnervion.qa.Model.Responser;
 import es.iesnervion.qa.R;
+import retrofit2.Call;
 
-public class GamingActivity extends FragmentActivity {
+public class GamingActivity extends FragmentActivity implements Responser<List<Question>>{
     private MediaPlayer mediaPlayer;
     private int iClicks = 0;
     private static final String CLICK_VALUE = "click_value";
@@ -25,6 +32,8 @@ public class GamingActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gaming);
+
+        Category category = getIntent().getParcelableExtra(Category.CATEGORY_KEY);
 
         mediaPlayer = MediaPlayer.create(this, R.raw.music);
         txtClicks = (TextView) findViewById(R.id.clock_gaming_tv);
@@ -52,8 +61,13 @@ public class GamingActivity extends FragmentActivity {
         //https://github.com/adripol94/Android/blob/master/Ejercicio5.2/app/src/main/java/es/iesnervion/ejercicio52/MainActivity.java
         //TODO get Questions
 
-        Question[] q = new Question[5];
+        RetrofitControler retrofitControler = new RetrofitControler();
+        //TODO use here user object token.
+        Call<List<Question>> listCall = retrofitControler.getListQuestionByCategory("Basic YWRyaXBvbDk0QGdtYWlsLmNvbToxMjM=",
+                category.getId());
+        listCall.enqueue(new CallBackProgress<List<Question>>(this));
 
+        /*
         try {
             //IDEA rellenar con la capa DAL el array de Questions y inflar el fragment tantas preguntas tenga el array.
             // para ello hasta que el usuario no haga click no se volverá a calgar el otro layout.
@@ -75,8 +89,11 @@ public class GamingActivity extends FragmentActivity {
             //TODO change that
             e.printStackTrace();
         }
+        */
 
     }
+
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -94,5 +111,15 @@ public class GamingActivity extends FragmentActivity {
     protected void onStop() {
         super.onStop();
         mediaPlayer.stop();
+    }
+
+    @Override
+    public void onFinish(List<Question> obj, String bearer) {
+
+    }
+
+    @Override
+    public void onFailure(Throwable t) {
+
     }
 }

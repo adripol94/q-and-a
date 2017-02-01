@@ -1,6 +1,7 @@
 package es.iesnervion.qa.ui.Adapter;
 
-import android.support.design.widget.Snackbar;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import es.iesnervion.qa.Model.Category;
 import es.iesnervion.qa.R;
+import es.iesnervion.qa.ui.View.GamingActivity;
 
 /**
  * Created by adripol94 on 1/26/17.
@@ -21,9 +23,11 @@ import es.iesnervion.qa.R;
 public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.ViewHolder> {
 
     private List<Category> categories;
+    private Context c;
 
-    public CategoriaAdapter(List<Category> categories) {
+    public CategoriaAdapter(List<Category> categories, Context c) {
         this.categories = categories;
+        this.c = c;
     }
 
     /**
@@ -77,13 +81,15 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
      * @param position The position of the item within the adapter's data set.
      */
     @Override
-    public void onBindViewHolder(CategoriaAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(CategoriaAdapter.ViewHolder holder, final int position) {
         holder.getTv().setText(categories.get(position).getName());
         //FIXME holder.getCv().setBackgroundResource();
         holder.getCv().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace this", Snackbar.LENGTH_LONG).show();
+                Intent it = new Intent(c, GamingActivity.class);
+                it.putExtra(Category.CATEGORY_KEY, categories.get(position));
+                c.startActivity(it);
             }
         });
     }

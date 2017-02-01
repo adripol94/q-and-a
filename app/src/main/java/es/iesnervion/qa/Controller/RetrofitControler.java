@@ -54,6 +54,12 @@ public class RetrofitControler {
         return questions;
     }
 
+    public Call<List<Question>> getListQuestionByCategory(String token, int idCategory) {
+        Call<List<Question>> call = service.getListQuestionsByCategory(token, idCategory);
+
+        return call;
+    }
+
     public Call<List<Category>> getListCategory(String token) {
         Call<List<Category>> categories = service.listCategory(token);
 

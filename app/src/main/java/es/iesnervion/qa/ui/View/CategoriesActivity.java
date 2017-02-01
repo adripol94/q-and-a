@@ -67,7 +67,7 @@ public class CategoriesActivity extends AppCompatActivity implements Responser<L
         (findViewById(R.id.progressBarCategory)).setVisibility(View.GONE);
         (findViewById(R.id.cargando_content_tv)).setVisibility(View.GONE);
 
-        CategoriaAdapter mCategoryAdapter = new CategoriaAdapter(categories);
+        CategoriaAdapter mCategoryAdapter = new CategoriaAdapter(categories, this);
         mRecyclerView.setAdapter(mCategoryAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setHasFixedSize(true);
