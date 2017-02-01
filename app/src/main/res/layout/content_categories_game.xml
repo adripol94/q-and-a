@@ -18,12 +18,12 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:id="@+id/progressBarCategory"
+            android:visibility="visible"
             android:indeterminateTint="@color/colorGame" />
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorGame"
             android:id="@+id/rvCategorias">
 
         </android.support.v7.widget.RecyclerView>
@@ -31,10 +31,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerInParent="true"
-            android:id="@+id/backButton"
-            android:text="@string/backButton" />
+            android:text="@string/cargando_content_categories_tv"
+            android:layout_above="@+id/progressBarCategory"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/cargando_content_tv" />
 
     </RelativeLayout>
 

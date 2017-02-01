@@ -8,6 +8,7 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -29,6 +30,7 @@ public class CategoriesActivity extends AppCompatActivity implements Responser<L
 
     private List<Category> categories;
     private RetrofitControler retrofitControler;
+    private RecyclerView mRecyclerView;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -50,34 +52,25 @@ public class CategoriesActivity extends AppCompatActivity implements Responser<L
             }
         });
 
-        //Back TextView...
-        TextView tx = (TextView) findViewById(R.id.backButton);
-        tx.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        mRecyclerView = (RecyclerView)findViewById(R.id.rvCategorias);
 
         retrofitControler = new RetrofitControler();
         Call<List<Category>> categCall = retrofitControler.getListCategory("Basic YWRyaXBvbDk0QGdtYWlsLmNvbToxMjM=");
         categCall.enqueue(new CallBackProgress<List<Category>>(this));
 
-
-
     }
 
     @Override
     public void onFinish(List<Category> obj, String bearer) {
-        (findViewById(R.id.progressBarCategory)).setVisibility(View.GONE);
-
         categories = obj;
-        CategoriaAdapter mCategoryAdapter;
-        RecyclerView mRecyclerView = (RecyclerView)findViewById(R.id.rvCategorias);
 
-        mCategoryAdapter = new CategoriaAdapter(categories);
+        (findViewById(R.id.progressBarCategory)).setVisibility(View.GONE);
+        (findViewById(R.id.cargando_content_tv)).setVisibility(View.GONE);
+
+        CategoriaAdapter mCategoryAdapter = new CategoriaAdapter(categories);
         mRecyclerView.setAdapter(mCategoryAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setHasFixedSize(true);
     }
 
     @Override
