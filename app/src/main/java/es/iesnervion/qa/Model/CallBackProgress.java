@@ -1,9 +1,14 @@
 package es.iesnervion.qa.Model;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 
 import java.util.List;
 
+import es.iesnervion.qa.R;
+import es.iesnervion.qa.TestPrueba;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -12,13 +17,15 @@ import retrofit2.Response;
  * Created by apol on 1/02/17.
  */
 
-public class CallBackProgress implements Callback<List<Question>> {
+public class CallBackProgress implements Callback<Question> {
     private Context c;
-    private List<Question> lisato;
+    private Question lisato;
+    private View v;
 
 
     public CallBackProgress(Context c) {
         this.c = c;
+        v = ((Activity)c).findViewById(R.id.activity_test_prueba);
     }
 
     /**
@@ -31,10 +38,15 @@ public class CallBackProgress implements Callback<List<Question>> {
      * @param response
      */
     @Override
-    public void onResponse(Call<List<Question>> call, Response<List<Question>> response) {
-        lisato = response.body();
-        Responser res = (Responser) c;
-        res.terminado();
+    public void onResponse(Call<Question> call, Response<Question> response) {
+        if (response.body() == null)
+            Snackbar.make(v, response.message(), Snackbar.LENGTH_LONG).show();
+        else {
+            lisato = response.body();
+            String bearer = response.headers().get("WWW-Authenticate");
+            Responser res = (Responser) c;
+            res.terminado(lisato, bearer);
+        }
     }
 
     /**
@@ -45,7 +57,8 @@ public class CallBackProgress implements Callback<List<Question>> {
      * @param t
      */
     @Override
-    public void onFailure(Call<List<Question>> call, Throwable t) {
-
+    public void onFailure(Call<Question> call, Throwable t) {
+        Snackbar.make(v, t.getMessage(), Snackbar.LENGTH_LONG).show();
+        t.printStackTrace();
     }
 }

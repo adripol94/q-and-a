@@ -15,10 +15,9 @@ import es.iesnervion.qa.Model.Responser;
 import es.iesnervion.qa.Model.RetrofitControler;
 import es.iesnervion.qa.ui.View.GamingActivity;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class TestPrueba extends AppCompatActivity implements Responser {
+
+public class TestPrueba extends AppCompatActivity implements Responser<Question> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,19 +25,26 @@ public class TestPrueba extends AppCompatActivity implements Responser {
         setContentView(R.layout.activity_test_prueba);
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        RetrofitControler r = new RetrofitControler("http://api.qanda.dev/");
-        Call<List<Question>> listQuestion = r.getListQuestion("Basic YWRyaXBvbDk0QGdtYWlsLmNvbToxMjM=");
-        listQuestion.enqueue(new CallBackProgress(this
-        ));
+
+
+
+        RetrofitControler r = new RetrofitControler("https://api.apol.ciclo.iesnervion.es/index.php/");
+
+        Call<Question> listQuestion = r.getListQuestion("Basic YWRyaXBvbDk0QGdtYWlsLmNvbToxMjM=");
+        try {
+            listQuestion.enqueue(new CallBackProgress(this));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         progressBar.animate().start();
     }
 
 
     @Override
-    public void terminado() {
-        Snackbar.make(getCurrentFocus(), "asd", Snackbar.LENGTH_LONG).show();
+    public void terminado(Question obj, String bearer) {
         Intent it = new Intent(TestPrueba.this, GamingActivity.class);
+        it.putExtra(Question.CATEGORY_KEY, obj);
         startActivity(it);
     }
 }

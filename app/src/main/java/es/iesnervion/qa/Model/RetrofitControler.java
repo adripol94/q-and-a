@@ -1,5 +1,8 @@
 package es.iesnervion.qa.Model;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -15,24 +18,35 @@ public class RetrofitControler {
     private RetrofitInterfaceQA service;
     private Retrofit retrofit;
 
+
     public RetrofitControler() {
+
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
         retrofit = new Retrofit.Builder()
                 .baseUrl(NAME_SERVER)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         service = retrofit.create(RetrofitInterfaceQA.class);
     }
 
     public RetrofitControler(String url) {
+
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
         retrofit = new Retrofit.Builder()
                 .baseUrl(url)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         service = retrofit.create(RetrofitInterfaceQA.class);
     }
 
-    public Call<List<Question>> getListQuestion(String header) {
-        Call<List<Question>> questions = service.lisQuestions(header);
+    public Call<Question> getListQuestion(String token) {
+        Call<Question> questions = service.lisQuestions(token);
 
         return questions;
     }

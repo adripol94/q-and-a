@@ -13,7 +13,7 @@ import java.util.ArrayList;
 //TODO Preguntar a Miguel si es mejor con un Objeto de atributo o que herede de este...
 public class Question extends Category implements Parcelable {
     private String question;
-    private ArrayList<Answer> answers;
+    private ArrayList<Answer> answer;
     public static final String CATEGORY_KEY = "category";
 
     public Question() {
@@ -21,7 +21,7 @@ public class Question extends Category implements Parcelable {
 
     public Question(String question, ArrayList<Answer> answer) {
         this.question = question;
-        this.answers = answer;
+        this.answer = answer;
     }
 
     public String getQuestion() {
@@ -29,7 +29,7 @@ public class Question extends Category implements Parcelable {
     }
 
     public ArrayList<Answer> getAnswer() {
-        return answers;
+        return answer;
     }
 
 
@@ -41,13 +41,13 @@ public class Question extends Category implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.question);
-        dest.writeList(this.answers);
+        dest.writeList(this.answer);
     }
 
     protected Question(Parcel in) {
         this.question = in.readString();
-        this.answers = new ArrayList<Answer>();
-        in.readList(this.answers, Answer.class.getClassLoader());
+        this.answer = new ArrayList<Answer>();
+        in.readList(this.answer, Answer.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<Question> CREATOR = new Parcelable.Creator<Question>() {

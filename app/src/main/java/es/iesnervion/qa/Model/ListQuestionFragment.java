@@ -93,7 +93,7 @@ public class ListQuestionFragment extends ListFragment {
         try {
             mCallBack = (OnSelectedItem) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException("No implementado OnHeadSelectedListener :("
+            throw new ClassCastException("No implementado OnHeadSelectedListener :( "
                     + e.getMessage() + ")");
         }
     }

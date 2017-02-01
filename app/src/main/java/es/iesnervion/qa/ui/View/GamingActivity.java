@@ -66,14 +66,6 @@ public class GamingActivity extends FragmentActivity {
         //Adapter for answer
         //https://github.com/adripol94/Android/blob/master/Ejercicio5.2/app/src/main/java/es/iesnervion/ejercicio52/MainActivity.java
         //TODO get Questions
-        RetrofitControler r = new RetrofitControler("http://api.qanda.dev/");
-        Call<List<Question>> listQuestion = r.getListQuestion("Basic YWRyaXBvbDk0QGdtYWlsLmNvbToxMjM=");
-
-        try {
-            List<Question> list = listQuestion.execute().body();
-        } catch (Exception e) {
-            Snackbar.make(getCurrentFocus(), e.getMessage(), Snackbar.LENGTH_LONG).show();
-        }
 
         Question[] q = new Question[5];
 

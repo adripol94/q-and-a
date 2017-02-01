@@ -13,7 +13,7 @@ import retrofit2.http.Path;
 
 public interface RetrofitInterfaceQA {
     @GET("question")
-    Call<List<Question>> lisQuestions(@Header("HTTP_WWW_AUTHENTICATE") String autentication);
+    Call<Question> lisQuestions(@Header("WWW-Authenticate") String token);
 
     @GET("question/{id}")
     Call<Question> question();
