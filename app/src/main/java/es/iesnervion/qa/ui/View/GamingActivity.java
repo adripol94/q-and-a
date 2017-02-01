@@ -14,7 +14,6 @@ import java.util.TimerTask;
 import es.iesnervion.qa.Controller.RetrofitControler;
 import es.iesnervion.qa.Model.CallBackProgress;
 import es.iesnervion.qa.Model.Category;
-import es.iesnervion.qa.Model.ListQuestionFragment;
 import es.iesnervion.qa.Model.Question;
 import es.iesnervion.qa.Model.Responser;
 import es.iesnervion.qa.R;
@@ -63,6 +62,7 @@ public class GamingActivity extends FragmentActivity implements Responser<List<Q
 
         RetrofitControler retrofitControler = new RetrofitControler();
         //TODO use here user object token.
+        //TODO Error aqui exception de query no hecha bien
         Call<List<Question>> listCall = retrofitControler.getListQuestionByCategory("Basic YWRyaXBvbDk0QGdtYWlsLmNvbToxMjM=",
                 category.getId());
         listCall.enqueue(new CallBackProgress<List<Question>>(this));
