@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class RetrofitControler {
-    private static String NAME_SERVER = "https://api.apol.ciclo.iesnervion.es/index.php/";
+    private static String NAME_SERVER = "https://api.apol.ciclo.iesnervion.es/";
     private RetrofitInterfaceQA service;
     private Retrofit retrofit;
 
@@ -54,7 +54,7 @@ public class RetrofitControler {
         return questions;
     }
 
-    public Call<List<Question>> getListQuestionByCategory(String token, int idCategory) {
+    public Call<List<Question>> getListQuestionByCategory(String token, String idCategory) {
         Call<List<Question>> call = service.getListQuestionsByCategory(token, idCategory);
 
         return call;

@@ -2,6 +2,7 @@ package es.iesnervion.qa.ui.View;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -56,40 +57,17 @@ public class GamingActivity extends FragmentActivity implements Responser<List<Q
             }
         }, 0, 100);
 
-        //Adapter for answer
-        //https://github.com/adripol94/Android/blob/master/Ejercicio5.2/app/src/main/java/es/iesnervion/ejercicio52/MainActivity.java
-        //TODO get Questions
-
         RetrofitControler retrofitControler = new RetrofitControler();
         //TODO use here user object token.
-        //TODO Error aqui exception de query no hecha bien
-        Call<List<Question>> listCall = retrofitControler.getListQuestionByCategory("Basic YWRyaXBvbDk0QGdtYWlsLmNvbToxMjM=",
-                category.getId());
-        listCall.enqueue(new CallBackProgress<List<Question>>(this));
-
-        /*
         try {
-            //IDEA rellenar con la capa DAL el array de Questions y inflar el fragment tantas preguntas tenga el array.
-            // para ello hasta que el usuario no haga click no se volverá a calgar el otro layout.
-            //TODO Puede que se tenga que hacer en hilos.
-
-            for (int i = 0; i < q.length; i++) {
-                ListQuestionFragment list = new ListQuestionFragment().newInstance(q[i]);
-
-                // Hereda setArguments desde Fragment
-                list.setArguments(getIntent().getExtras());
-
-                // Con FragmentManager podremos interactuar entre el fragment_movil y la clase list
-                // gracias a esto pondremos todos las propiedades preparada de ese
-                // fragment en el fragment
-                getSupportFragmentManager().beginTransaction().add(R.id.frame_gammingActivity, list)
-                        .commit();
-            }
-        } catch (ClassCastException e) {
-            //TODO change that
+            Call<List<Question>> listCall = retrofitControler.getListQuestionByCategory("Basic YWRyaXBvbDk0QGdtYWlsLmNvbToxMjM=",
+                    String.valueOf(category.getId()));
+            listCall.enqueue(new CallBackProgress<List<Question>>(this));
+        } catch (Exception e) {
+            //TODO for depure
             e.printStackTrace();
         }
-        */
+
 
     }
 
@@ -115,7 +93,8 @@ public class GamingActivity extends FragmentActivity implements Responser<List<Q
 
     @Override
     public void onFinish(List<Question> obj, String bearer) {
-
+        List<Question> questions= obj;
+        Question q = questions.get(1);
     }
 
     @Override
