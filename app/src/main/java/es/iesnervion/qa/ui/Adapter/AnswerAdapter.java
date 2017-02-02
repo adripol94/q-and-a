@@ -1,7 +1,6 @@
 package es.iesnervion.qa.ui.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,23 +12,23 @@ import android.widget.TextView;
 import java.util.List;
 
 import es.iesnervion.qa.Model.Answer;
-import es.iesnervion.qa.Model.Category;
-import es.iesnervion.qa.Model.Question;
+import es.iesnervion.qa.Model.ResponserAnswer;
 import es.iesnervion.qa.R;
-import es.iesnervion.qa.ui.View.GamingActivity;
 
 /**
  * Created by adripol94 on 1/26/17.
  */
 
-public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.ViewHolder> {
+public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder> {
 
-    private List<Category> categories;
+    private List<Answer> answers;
     private Context c;
+    private ResponserAnswer interfaceConnection;
 
-    public CategoriaAdapter(List<Category> categories, Context c) {
-        this.categories = categories;
+    public AnswerAdapter(List<Answer> answers, Context c) {
+        this.answers = answers;
         this.c = c;
+        interfaceConnection = (ResponserAnswer) c;
     }
 
     /**
@@ -53,12 +52,11 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
      * @see #onBindViewHolder(ViewHolder, int)
      */
     @Override
-    public CategoriaAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AnswerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.template_categories, parent, false);
+                .inflate(R.layout.template_gaming, parent, false);
 
-        ViewHolder vh = new ViewHolder(v, R.id.template_categoria_categoria_txt,
-                R.id.template_categoria_categoria_cv);
+        ViewHolder vh = new ViewHolder(v, R.id.answer_gaming_tv);
         return vh;
     }
 
@@ -83,15 +81,13 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
      * @param position The position of the item within the adapter's data set.
      */
     @Override
-    public void onBindViewHolder(CategoriaAdapter.ViewHolder holder, final int position) {
-        holder.getTv().setText(categories.get(position).getName());
+    public void onBindViewHolder(AnswerAdapter.ViewHolder holder, final int position) {
+        holder.getTv().setText(answers.get(position).getAnswer());
         //FIXME holder.getCv().setBackgroundResource();
-        holder.getCv().setOnClickListener(new View.OnClickListener() {
+        holder.getTv().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(c, GamingActivity.class);
-                it.putExtra(Category.CATEGORY_KEY, categories.get(position));
-                c.startActivity(it);
+                interfaceConnection.onAnswerSelected(answers.get(position));
             }
         });
     }
@@ -103,7 +99,7 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
      */
     @Override
     public int getItemCount() {
-        return categories.size();
+        return answers.size();
     }
 
     /**
@@ -119,24 +115,17 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
         /**
          * ViewHolder responsable del {@see RecyclerView} de {@link R.layout#template_categories}.
          * @param itemView Vista
-         * @param idCategoriaTxt id del {@link android.widget.TextView}
-         * @param idCategoriaCardView id del {@link android.support.v7.widget.CardView}
+         * @param idCategoriaTxt id del {@link TextView}
          */
-        public ViewHolder(View itemView, int idCategoriaTxt, int idCategoriaCardView) {
+        public ViewHolder(View itemView, int idCategoriaTxt) {
             super(itemView);
             tv = (TextView)itemView.findViewById(idCategoriaTxt);
-            cv = (CardView)itemView.findViewById(idCategoriaCardView);
             //itemView.setOnClickListener(this);
         }
 
         public TextView getTv() {
             return tv;
         }
-
-        public CardView getCv() {
-            return cv;
-        }
-
 
         /*@Override
         public void onClick(View view) {

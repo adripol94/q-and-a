@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Clase Qestion, esta clase se encargará de guardar las preguntas y sus dichas respuestas
@@ -13,13 +14,13 @@ import java.util.ArrayList;
 //TODO Preguntar a Miguel si es mejor con un Objeto de atributo o que herede de este...
 public class Question extends Category implements Parcelable {
     private String question;
-    private ArrayList<Answer> answer;
+    private List<Answer> answer;
     public static final String CATEGORY_KEY = "category";
 
     public Question() {
     }
 
-    public Question(String question, ArrayList<Answer> answer) {
+    public Question(String question, List<Answer> answer) {
         this.question = question;
         this.answer = answer;
     }
@@ -28,7 +29,7 @@ public class Question extends Category implements Parcelable {
         return question;
     }
 
-    public ArrayList<Answer> getAnswer() {
+    public List<Answer> getAnswer() {
         return answer;
     }
 
@@ -40,17 +41,18 @@ public class Question extends Category implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
         dest.writeString(this.question);
-        dest.writeList(this.answer);
+        dest.writeTypedList(this.answer);
     }
 
     protected Question(Parcel in) {
+        super(in);
         this.question = in.readString();
-        this.answer = new ArrayList<Answer>();
-        in.readList(this.answer, Answer.class.getClassLoader());
+        this.answer = in.createTypedArrayList(Answer.CREATOR);
     }
 
-    public static final Parcelable.Creator<Question> CREATOR = new Parcelable.Creator<Question>() {
+    public static final Creator<Question> CREATOR = new Creator<Question>() {
         @Override
         public Question createFromParcel(Parcel source) {
             return new Question(source);

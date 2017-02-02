@@ -8,6 +8,7 @@
         style="@style/Buttonstyle"
         android:text="Jugar"
         android:id="@+id/answer_gaming_tv"
+        android:clickable="true"
         android:background="@color/cardview_dark_background"
         />
 

@@ -5,27 +5,41 @@ import android.media.MediaPlayer;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import es.iesnervion.qa.Controller.RetrofitControler;
+import es.iesnervion.qa.Model.Answer;
 import es.iesnervion.qa.Model.CallBackProgress;
 import es.iesnervion.qa.Model.Category;
 import es.iesnervion.qa.Model.Question;
 import es.iesnervion.qa.Model.Responser;
+import es.iesnervion.qa.Model.ResponserAnswer;
 import es.iesnervion.qa.R;
+import es.iesnervion.qa.ui.Adapter.AnswerAdapter;
 import retrofit2.Call;
 
-public class GamingActivity extends FragmentActivity implements Responser<List<Question>>{
+public class GamingActivity extends AppCompatActivity implements Responser<List<Question>>, ResponserAnswer{
     private MediaPlayer mediaPlayer;
     private int iClicks = 0;
     private static final String CLICK_VALUE = "click_value";
     private TextView txtClicks;
     private View mProgressView;
+    private List<Question> questions;
+    private int contadorPreguntas;
+    private HashMap<Integer, Integer> respuestas;
 
 
     @Override
@@ -38,7 +52,8 @@ public class GamingActivity extends FragmentActivity implements Responser<List<Q
         mediaPlayer = MediaPlayer.create(this, R.raw.music);
         txtClicks = (TextView) findViewById(R.id.clock_gaming_tv);
         mProgressView = findViewById(R.id.login_progress);
-
+        contadorPreguntas = 0;
+        respuestas = new HashMap<>();
 
 
         Timer timer = new Timer();
@@ -80,12 +95,6 @@ public class GamingActivity extends FragmentActivity implements Responser<List<Q
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        mediaPlayer.start();
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
         mediaPlayer.stop();
@@ -93,12 +102,36 @@ public class GamingActivity extends FragmentActivity implements Responser<List<Q
 
     @Override
     public void onFinish(List<Question> obj, String bearer) {
-        List<Question> questions= obj;
-        Question q = questions.get(1);
+        questions = obj;
+        setQuestions(questions.get(contadorPreguntas));
     }
 
     @Override
     public void onFailure(Throwable t) {
 
+    }
+
+    private void setQuestions(Question q) {
+        ((TextView)findViewById(R.id.clock_gaming_tv)).setText(q.getName());
+
+        RecyclerView mRecyclerView = (RecyclerView)findViewById(R.id.answers_gaming_lv);
+        AnswerAdapter mCategoryAdapter = new AnswerAdapter(questions.get(1).getAnswer(), this);
+        mRecyclerView.setAdapter(mCategoryAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setHasFixedSize(true);
+
+        if (!mediaPlayer.isPlaying())
+            mediaPlayer.start();
+    }
+
+    @Override
+    public void onAnswerSelected(Answer answer) {
+        if (contadorPreguntas < questions.size()) {
+            respuestas.put(questions.get(contadorPreguntas).getId(), answer.getId());
+            contadorPreguntas++;
+            setQuestions(questions.get(contadorPreguntas));
+        } else {
+            Toast.makeText(this, "Terminado", Toast.LENGTH_LONG);
+        }
     }
 }
