@@ -21,6 +21,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -39,14 +40,20 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.iesnervion.qa.Controller.RetrofitControler;
+import es.iesnervion.qa.Model.Bearer;
+import es.iesnervion.qa.Model.CallBackProgress;
+import es.iesnervion.qa.Model.Responser;
+import es.iesnervion.qa.Model.User;
 import es.iesnervion.qa.R;
+import retrofit2.Call;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via email/password.
  */
-  public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+  public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, Responser<User> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -113,6 +120,7 @@ import static android.Manifest.permission.READ_CONTACTS;
             public void onGlobalLayout() {
                 int heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight();
                 if (heightDiff > dpToPx(getBaseContext(), 240)) { // if more than 200 dp, it's probably a keyboard...
+                    //TODO logo mas grande
                     mImageLogo.setImageResource(R.drawable.logo_small);
                 } else {
                     mImageLogo.setImageResource(R.drawable.logo_big);
@@ -229,7 +237,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() > 2;
     }
 
     /**
@@ -310,7 +318,28 @@ import static android.Manifest.permission.READ_CONTACTS;
 
         mEmailView.setAdapter(adapter);
     }
-    
+
+    @Override
+    public void onFinish(User obj, String bearer) {
+        mAuthTask = null;
+        showProgress(false);
+        finish();
+        Bearer.setDefaults(Bearer.BEARER_KEY, bearer, this);
+        Intent it = new Intent(LoginActivity.this, MenuActivity.class);
+        startActivity(it);
+
+    }
+
+    @Override
+    public void onFailure(Throwable t) {
+        //TODO cuando aparece un error debera devolver a la paguina login principal!
+        mAuthTask = null;
+        showProgress(false);
+        mPasswordView.setError(getString(R.string.error_incorrect_password));
+        mPasswordView.requestFocus();
+
+    }
+
 
     private interface ProfileQuery {
         String[] PROJECTION = {
@@ -321,6 +350,8 @@ import static android.Manifest.permission.READ_CONTACTS;
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
     }
+
+    //TODO Comprobar
 
     /**
      * Represents an asynchronous login/registration task used to authenticate
@@ -336,38 +367,43 @@ import static android.Manifest.permission.READ_CONTACTS;
             mPassword = password;
         }
 
+
+
         @Override
         protected Boolean doInBackground(Void... params) {
             boolean isValid = false;
+            /* */
+
+            String data = mEmail + ":" + mPassword;
+            String token = "Basic " + Base64.encodeToString(data.getBytes(), Base64.NO_WRAP);
+
+            try {
+                Call<User> listCall = new RetrofitControler().getUserByName(token.toString(), mEmail);
+                listCall.enqueue(new CallBackProgress<User>(LoginActivity.this, LoginActivity.this));
+            } catch (Exception e) {
+                //TODO for depure
+                e.printStackTrace();
+            }
+
+            /* for (String credential : DUMMY_CREDENTIALS) {
+                String[] pieces = credential.split(":");
+                if (pieces[0].equals(mEmail) && pieces[1].equals(mPassword)) {
+                    isValid = true;
+                }
+            } */
+
             try {
                 // Simulate network access.
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 return false;
             }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail) && pieces[1].equals(mPassword)) {
-                    isValid = true;
-                }
-            }
             return isValid;
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
+        protected void onPostExecute(Boolean aBoolean) {
 
-            if (success) {
-                finish();
-                Intent it = new Intent(LoginActivity.this, MenuActivity.class);
-                startActivity(it);
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
         }
 
         @Override
@@ -375,6 +411,8 @@ import static android.Manifest.permission.READ_CONTACTS;
             mAuthTask = null;
             showProgress(false);
         }
+
+
     }
 }
 

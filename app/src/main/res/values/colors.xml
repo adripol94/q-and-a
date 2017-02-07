@@ -10,4 +10,5 @@
     <color name="colorSettings">#f9a825</color>
     <color name="colorFirends">#1565c0</color>
     <color name="colorQuestions">#c62828</color>
+    <color name="colorCircleLoading">#459</color>
 </resources>

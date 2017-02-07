@@ -1,5 +1,6 @@
 package es.iesnervion.qa.Model;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -13,13 +14,32 @@ public class Category implements Parcelable {
     public static String CATEGORY_KEY = "category";
     private int id;
     private String name;
+    private String image;
+    private Bitmap imgBitMap;
 
     public Category() {
     }
 
-    public Category(int id, String name) {
+    public Category(int id, String name, String image) {
         this.id = id;
         this.name = name;
+        this.image = image;
+    }
+
+    public Bitmap getImgBitMap() {
+        return imgBitMap;
+    }
+
+    public void setImgBitMap(Bitmap imgBitMap) {
+        this.imgBitMap = imgBitMap;
+    }
+
+    public String getImg() {
+        return image;
+    }
+
+    public void setImg(String img) {
+        this.image = img;
     }
 
     public int getId() {
@@ -48,14 +68,18 @@ public class Category implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.id);
         dest.writeString(this.name);
+        dest.writeString(this.image);
+        dest.writeParcelable(this.imgBitMap, flags);
     }
 
     protected Category(Parcel in) {
         this.id = in.readInt();
         this.name = in.readString();
+        this.image = in.readString();
+        this.imgBitMap = in.readParcelable(Bitmap.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<Category> CREATOR = new Parcelable.Creator<Category>() {
+    public static final Creator<Category> CREATOR = new Creator<Category>() {
         @Override
         public Category createFromParcel(Parcel source) {
             return new Category(source);

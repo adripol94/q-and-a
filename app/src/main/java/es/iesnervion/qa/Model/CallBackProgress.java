@@ -1,11 +1,10 @@
 package es.iesnervion.qa.Model;
 
-import android.app.Activity;
 import android.content.Context;
-import android.support.design.widget.Snackbar;
-import android.view.View;
+import android.support.annotation.Nullable;
+import android.widget.Toast;
 
-import es.iesnervion.qa.R;
+import es.iesnervion.qa.ui.View.CategoriesActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -17,14 +16,13 @@ import retrofit2.Response;
 public class CallBackProgress<T> implements Callback<T> {
     private Context c;
     private T lisato;
-    private View v;
     Responser res;
 
 
-    public CallBackProgress(Context c) {
+    public CallBackProgress(Responser r, Context c) {
         this.c = c;
-        v = ((Activity)c).findViewById(R.id.activity_test_prueba);
-        res = (Responser) c;
+        //Exception here
+        res = r;
     }
 
     /**
@@ -39,7 +37,7 @@ public class CallBackProgress<T> implements Callback<T> {
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
         if (response.body() == null)
-            Snackbar.make(v, response.message(), Snackbar.LENGTH_LONG).show();
+            onFailure(call, new Throwable(response.message()));
         else {
             lisato = response.body();
             String bearer = response.headers().get("WWW-Authenticate");
@@ -57,7 +55,7 @@ public class CallBackProgress<T> implements Callback<T> {
     @Override
     public void onFailure(Call<T> call, Throwable t) {
         //TODO solo para el depurado
-        Snackbar.make(v, t.getMessage(), Snackbar.LENGTH_LONG).show();
+        Toast.makeText(c, t.getMessage(), Toast.LENGTH_LONG).show();
         t.printStackTrace();
         res.onFailure(t);
     }

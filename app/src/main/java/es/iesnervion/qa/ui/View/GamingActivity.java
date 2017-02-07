@@ -1,20 +1,19 @@
 package es.iesnervion.qa.ui.View;
 
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.github.lzyzsd.circleprogress.ArcProgress;
+import com.github.lzyzsd.circleprogress.CircleProgress;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
@@ -22,24 +21,28 @@ import java.util.TimerTask;
 
 import es.iesnervion.qa.Controller.RetrofitControler;
 import es.iesnervion.qa.Model.Answer;
+import es.iesnervion.qa.Model.Bearer;
 import es.iesnervion.qa.Model.CallBackProgress;
 import es.iesnervion.qa.Model.Category;
 import es.iesnervion.qa.Model.Question;
 import es.iesnervion.qa.Model.Responser;
 import es.iesnervion.qa.Model.ResponserAnswer;
+import es.iesnervion.qa.Model.TimerEndGamming;
 import es.iesnervion.qa.R;
 import es.iesnervion.qa.ui.Adapter.AnswerAdapter;
 import retrofit2.Call;
 
-public class GamingActivity extends AppCompatActivity implements Responser<List<Question>>, ResponserAnswer{
+public class GamingActivity extends AppCompatActivity implements Responser<List<Question>>, ResponserAnswer, TimerEndGamming{
     private MediaPlayer mediaPlayer;
     private int iClicks = 0;
     private static final String CLICK_VALUE = "click_value";
-    private TextView txtClicks;
+    private CircleProgress arcClicks;
     private View mProgressView;
     private List<Question> questions;
     private int contadorPreguntas;
     private HashMap<Integer, Integer> respuestas;
+    private TextView questionGaming;
+    private Timer timer;
 
 
     @Override
@@ -50,42 +53,27 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
         Category category = getIntent().getParcelableExtra(Category.CATEGORY_KEY);
 
         mediaPlayer = MediaPlayer.create(this, R.raw.music);
-        txtClicks = (TextView) findViewById(R.id.clock_gaming_tv);
+        arcClicks = (CircleProgress) findViewById(R.id.clock_gaming_pb);
         mProgressView = findViewById(R.id.login_progress);
+        questionGaming = (TextView)findViewById(R.id.question_gaming_tv);
         contadorPreguntas = 0;
         respuestas = new HashMap<>();
+        timer = new Timer();
 
+        questionGaming.setText("Preparando las respuestas...");
 
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        // task to be done every 100 milliseconds
-                        iClicks += 1;
-                        txtClicks.setText(String.valueOf(iClicks));
-                    }
-                });
-            }
-        }, 0, 100);
+        String token = Bearer.getDefaults(Bearer.BEARER_KEY, this);
 
         RetrofitControler retrofitControler = new RetrofitControler();
-        //TODO use here user object token.
         try {
-            Call<List<Question>> listCall = retrofitControler.getListQuestionByCategory("Basic YWRyaXBvbDk0QGdtYWlsLmNvbToxMjM=",
+            Call<List<Question>> listCall = retrofitControler.getListQuestionByCategory(token,
                     String.valueOf(category.getId()));
-            listCall.enqueue(new CallBackProgress<List<Question>>(this));
+            listCall.enqueue(new CallBackProgress<List<Question>>(this, this));
         } catch (Exception e) {
             //TODO for depure
             e.printStackTrace();
         }
-
-
     }
-
 
 
     @Override
@@ -103,6 +91,9 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
     @Override
     public void onFinish(List<Question> obj, String bearer) {
         questions = obj;
+        if (!mediaPlayer.isPlaying())
+            mediaPlayer.start();
+
         setQuestions(questions.get(contadorPreguntas));
     }
 
@@ -112,26 +103,75 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
     }
 
     private void setQuestions(Question q) {
-        ((TextView)findViewById(R.id.clock_gaming_tv)).setText(q.getName());
+        timer.schedule(new RunClock(this), 0, 100);
+
+        questionGaming.setText("Pregunta " + (contadorPreguntas + 1) +
+                ": " + q.getQuestion());
+        (findViewById(R.id.question_progress)).setVisibility(View.GONE);
 
         RecyclerView mRecyclerView = (RecyclerView)findViewById(R.id.answers_gaming_lv);
-        AnswerAdapter mCategoryAdapter = new AnswerAdapter(questions.get(1).getAnswer(), this);
+        AnswerAdapter mCategoryAdapter = new AnswerAdapter(questions.get(contadorPreguntas).getAnswer(), this);
         mRecyclerView.setAdapter(mCategoryAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setHasFixedSize(true);
 
-        if (!mediaPlayer.isPlaying())
-            mediaPlayer.start();
     }
 
     @Override
     public void onAnswerSelected(Answer answer) {
-        if (contadorPreguntas < questions.size()) {
-            respuestas.put(questions.get(contadorPreguntas).getId(), answer.getId());
+        respuestas.put(questions.get(contadorPreguntas).getId(), answer.getId());
+
+        if (contadorPreguntas < questions.size() -1) {
             contadorPreguntas++;
             setQuestions(questions.get(contadorPreguntas));
         } else {
-            Toast.makeText(this, "Terminado", Toast.LENGTH_LONG);
+            timer.cancel();
+            mediaPlayer.stop();
+            isFinish(false);
+        }
+    }
+
+    @Override
+    public void isFinish(boolean timeOut) {
+        Toast.makeText(this, "Juego acabado", Toast.LENGTH_SHORT).show();
+        Intent it = new Intent(this, Finish_Game.class);
+        startActivity(it);
+    }
+
+    /**
+     * Clase para el reloj!
+     */
+    public class RunClock extends TimerTask {
+        private Context c;
+
+        public RunClock(Context c) {
+            this.c = c;
+        }
+
+        @Override
+        public boolean cancel() {
+            ((TimerEndGamming) c).isFinish(true);
+
+
+            return super.cancel();
+        }
+
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    // task to be done every 100 milliseconds
+                    //TODO error aqui cuando click corre mas rapido.
+                    iClicks += 1;
+                    if (iClicks / 10 > 100)
+                        cancel();
+
+                    arcClicks.setProgress(iClicks / 10);
+                }
+            });
+
+
         }
     }
 }

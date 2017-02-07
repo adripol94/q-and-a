@@ -8,6 +8,7 @@ import java.util.List;
 import es.iesnervion.qa.Model.Category;
 import es.iesnervion.qa.Model.Question;
 import es.iesnervion.qa.Model.RetrofitInterfaceQA;
+import es.iesnervion.qa.Model.User;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -64,5 +65,11 @@ public class RetrofitControler {
         Call<List<Category>> categories = service.listCategory(token);
 
         return categories;
+    }
+
+    public Call<User> getUserByName(String token, String name) {
+        Call<User> call = service.getUser(token, name);
+
+        return call;
     }
 }

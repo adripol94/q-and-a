@@ -1,9 +1,14 @@
 package es.iesnervion.qa.ui.View;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,18 +24,22 @@ import android.widget.Toast;
 import java.util.List;
 
 import es.iesnervion.qa.Controller.RetrofitControler;
+import es.iesnervion.qa.Model.Bearer;
 import es.iesnervion.qa.Model.CallBackProgress;
 import es.iesnervion.qa.Model.Category;
+import es.iesnervion.qa.Model.GetImages;
 import es.iesnervion.qa.Model.Responser;
 import es.iesnervion.qa.R;
 import es.iesnervion.qa.ui.Adapter.CategoriaAdapter;
 import retrofit2.Call;
 
-public class CategoriesActivity extends AppCompatActivity implements Responser<List<Category>> {
+public class CategoriesActivity extends AppCompatActivity {
 
     private List<Category> categories;
     private RetrofitControler retrofitControler;
     private RecyclerView mRecyclerView;
+    private ResponseCategory responseCategory = new ResponseCategory(this);
+    private ResponserBitMapCategory responserBitMapCategory = new ResponserBitMapCategory(this);
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -47,34 +56,66 @@ public class CategoriesActivity extends AppCompatActivity implements Responser<L
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(CategoriesActivity.this, GamingActivity.class);
-                startActivity(it);
+                finish();
             }
         });
 
         mRecyclerView = (RecyclerView)findViewById(R.id.rvCategorias);
 
+        String token = Bearer.getDefaults(Bearer.BEARER_KEY, this);
+
         retrofitControler = new RetrofitControler();
-        Call<List<Category>> categCall = retrofitControler.getListCategory("Basic YWRyaXBvbDk0QGdtYWlsLmNvbToxMjM=");
-        categCall.enqueue(new CallBackProgress<List<Category>>(this));
+        Call<List<Category>> categCall = retrofitControler.getListCategory(token);
+        categCall.enqueue(new CallBackProgress<List<Category>>(responseCategory, this));
 
     }
 
-    @Override
-    public void onFinish(List<Category> obj, String bearer) {
-        categories = obj;
+    public class ResponseCategory implements Responser<List<Category>>{
+        private Context c;
 
-        (findViewById(R.id.progressBarCategory)).setVisibility(View.GONE);
-        (findViewById(R.id.cargando_content_tv)).setVisibility(View.GONE);
+        public ResponseCategory(Context c){
+            this.c= c;
+        }
 
-        CategoriaAdapter mCategoryAdapter = new CategoriaAdapter(categories, this);
-        mRecyclerView.setAdapter(mCategoryAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setHasFixedSize(true);
+        @Override
+        public void onFinish(List<Category> obj, String bearer) {
+            categories = obj;
+
+            for (int i = 0; i < categories.size(); i++)
+                new GetImages(categories.get(i).getImg(), responserBitMapCategory ,this.c, i).execute();
+
+        }
+
+        @Override
+        public void onFailure(Throwable t) {
+            Toast.makeText(c, t.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+    public class ResponserBitMapCategory implements Responser<Bitmap>{
+        private Context c;
+
+        public ResponserBitMapCategory(Context c){
+            this.c = c;
+        }
+
+        @Override
+        public void onFinish(Bitmap obj, String bearer) {
+            int i = Integer.parseInt(bearer);
+            categories.get(i).setImgBitMap(obj);
+
+            (findViewById(R.id.progressBarCategory)).setVisibility(View.GONE);
+            (findViewById(R.id.cargando_content_tv)).setVisibility(View.GONE);
+
+            CategoriaAdapter mCategoryAdapter = new CategoriaAdapter(categories, c);
+            mRecyclerView.setAdapter(mCategoryAdapter);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(c));
+            mRecyclerView.setHasFixedSize(true);
+        }
+
+        @Override
+        public void onFailure(Throwable t) {
+
+        }
     }
 
-    @Override
-    public void onFailure(Throwable t) {
-
-    }
 }

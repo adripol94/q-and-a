@@ -36,15 +36,14 @@
             android:name=".ui.View.CategoriesActivity"
             android:label="@string/title_activity_game_list"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.View.GamingActivity">
-
-        </activity>
+        <activity android:name=".ui.View.GamingActivity"></activity>
 
         <!-- LAYOUT FOR TEST UI -->
-        <activity android:name=".TestPrueba">
-
-
-        </activity>
+        <activity android:name=".TestPrueba"></activity>
+        <activity
+            android:name=".ui.View.Finish_Game"
+            android:label="@string/title_activity_finish__game"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

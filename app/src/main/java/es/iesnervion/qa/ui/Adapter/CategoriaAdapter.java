@@ -2,6 +2,7 @@ package es.iesnervion.qa.ui.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,9 +13,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import es.iesnervion.qa.Model.Answer;
 import es.iesnervion.qa.Model.Category;
-import es.iesnervion.qa.Model.Question;
 import es.iesnervion.qa.R;
 import es.iesnervion.qa.ui.View.GamingActivity;
 
@@ -26,6 +25,7 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
 
     private List<Category> categories;
     private Context c;
+    private ViewHolder vh;
 
     public CategoriaAdapter(List<Category> categories, Context c) {
         this.categories = categories;
@@ -59,6 +59,7 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
 
         ViewHolder vh = new ViewHolder(v, R.id.template_categoria_categoria_txt,
                 R.id.template_categoria_categoria_cv);
+        this.vh = vh;
         return vh;
     }
 
@@ -85,7 +86,9 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.View
     @Override
     public void onBindViewHolder(CategoriaAdapter.ViewHolder holder, final int position) {
         holder.getTv().setText(categories.get(position).getName());
-        //FIXME holder.getCv().setBackgroundResource();
+
+        holder.getCv().setBackground(new BitmapDrawable(c.getResources(), categories.get(position).getImgBitMap()));
+
         holder.getCv().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

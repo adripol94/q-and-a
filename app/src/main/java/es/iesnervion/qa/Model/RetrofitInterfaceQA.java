@@ -30,4 +30,6 @@ public interface RetrofitInterfaceQA {
     @POST("user")
     Call<User> createUser(@Header("WWW-Authenticate") String token, @Body User user);
 
+    @GET("user")
+    Call<User> getUser(@Header("WWW-Authenticate") String token, @Query("email") String email);
 }

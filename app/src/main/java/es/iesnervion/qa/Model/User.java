@@ -16,7 +16,7 @@ public class User implements Parcelable {
     private String email;
     private String name;
     private String surname;
-    private Date age;
+    private String age;
     private String user;
     private String password;
     private String token;
@@ -24,7 +24,7 @@ public class User implements Parcelable {
     public User() {
     }
 
-    public User(int id, String email, String name, String surname, Date age, String user, String password) {
+    public User(int id, String email, String name, String surname, String age, String user, String password) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -66,11 +66,11 @@ public class User implements Parcelable {
         this.surname = surname;
     }
 
-    public Date getAge() {
+    public String getAge() {
         return age;
     }
 
-    public void setAge(Date age) {
+    public void setAge(String age) {
         this.age = age;
     }
 
@@ -121,7 +121,7 @@ public class User implements Parcelable {
         this.email = in.readString();
         this.name = in.readString();
         this.surname = in.readString();
-        this.age = (Date) in.readSerializable();
+        this.age = in.readString();
         this.user = in.readString();
         this.password = in.readString();
     }
