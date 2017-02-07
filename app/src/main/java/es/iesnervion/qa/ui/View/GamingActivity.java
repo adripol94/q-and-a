@@ -2,12 +2,15 @@ package es.iesnervion.qa.ui.View;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,9 +59,12 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
         arcClicks = (CircleProgress) findViewById(R.id.clock_gaming_pb);
         mProgressView = findViewById(R.id.login_progress);
         questionGaming = (TextView)findViewById(R.id.question_gaming_tv);
+        RelativeLayout rl = (RelativeLayout)findViewById(R.id.stackPanel_clockGamming);
         contadorPreguntas = 0;
         respuestas = new HashMap<>();
         timer = new Timer();
+
+        rl.setBackground(new BitmapDrawable(getResources(), category.getImgBitMap()));
 
         questionGaming.setText("Preparando las respuestas...");
 
