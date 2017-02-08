@@ -35,6 +35,9 @@ import es.iesnervion.qa.R;
 import es.iesnervion.qa.ui.Adapter.AnswerAdapter;
 import retrofit2.Call;
 
+/**
+ * IMPORTANTE: Ir al Manifest, esta actividad no se guarda en la pila de actividades
+ */
 public class GamingActivity extends AppCompatActivity implements Responser<List<Question>>, ResponserAnswer, TimerEndGamming{
     private MediaPlayer mediaPlayer;
     private int iClicks = 0;
@@ -46,6 +49,7 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
     private HashMap<Integer, Integer> respuestas;
     private TextView questionGaming;
     private Timer timer;
+    public final static String BACK_ACTIVITY = "isBacked";
 
 
     @Override
@@ -103,13 +107,25 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
         setQuestions(questions.get(contadorPreguntas));
     }
 
+    /**
+     * Take care of popping the fragment back stack or finishing the activity
+     * as appropriate.
+     */
+    @Override
+    public void onBackPressed() {
+        Intent it = new Intent(this, Finish_Game.class);
+        it.putExtra(BACK_ACTIVITY, 1);
+        startActivity(it);
+    }
+
     @Override
     public void onFailure(Throwable t) {
 
     }
 
     private void setQuestions(Question q) {
-        timer.schedule(new RunClock(this), 0, 100);
+        if (contadorPreguntas == 0)
+            timer.schedule(new RunClock(this), 0, 1000);
 
         questionGaming.setText("Pregunta " + (contadorPreguntas + 1) +
                 ": " + q.getQuestion());
@@ -170,10 +186,10 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
                     // task to be done every 100 milliseconds
                     //TODO error aqui cuando click corre mas rapido.
                     iClicks += 1;
-                    if (iClicks / 10 > 100)
+                    if (iClicks > 100)
                         cancel();
 
-                    arcClicks.setProgress(iClicks / 10);
+                    arcClicks.setProgress(iClicks);
                 }
             });
 
