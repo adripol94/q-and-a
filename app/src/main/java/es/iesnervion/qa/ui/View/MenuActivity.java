@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import es.iesnervion.qa.Model.Bearer;
 import es.iesnervion.qa.R;
 import es.iesnervion.qa.ui.Transitions.TransitionInActivity;
 
@@ -17,6 +18,7 @@ public class MenuActivity extends AppCompatActivity {
     public TextView setting;
     public TextView friends;
     public TextView questions;
+    public TextView salir;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,15 @@ public class MenuActivity extends AppCompatActivity {
                 startActivityWithOptions(it);
 
              }
+        });
+
+        salir = (TextView) findViewById(R.id.txtSalir);
+        salir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bearer.delDefaults(v.getContext());
+                finish();
+            }
         });
 
         setting = (TextView) findViewById(R.id.txtSettings);

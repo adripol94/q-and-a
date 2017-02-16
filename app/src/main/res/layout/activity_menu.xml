@@ -37,4 +37,11 @@
             android:text="Mis Preguntas"
             style="@style/Buttonstyle"
             android:background="@drawable/shape_mispreguntas" />
+
+        <TextView
+            android:id="@+id/txtSalir"
+            android:layout_below="@id/txtRealizarPreguntas"
+            android:text="Salir"
+            style="@style/Buttonstyle"
+            android:background="@drawable/shape_mispreguntas" />
 </RelativeLayout>
