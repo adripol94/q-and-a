@@ -31,6 +31,7 @@ import es.iesnervion.qa.Model.Question;
 import es.iesnervion.qa.Model.Responser;
 import es.iesnervion.qa.Model.ResponserAnswer;
 import es.iesnervion.qa.Model.TimerEndGamming;
+import es.iesnervion.qa.Model.Validator;
 import es.iesnervion.qa.R;
 import es.iesnervion.qa.ui.Adapter.AnswerAdapter;
 import retrofit2.Call;
@@ -59,6 +60,7 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
 
         Category category = getIntent().getParcelableExtra(Category.CATEGORY_KEY);
 
+
         mediaPlayer = MediaPlayer.create(this, R.raw.music);
         arcClicks = (CircleProgress) findViewById(R.id.clock_gaming_pb);
         mProgressView = findViewById(R.id.login_progress);
@@ -73,6 +75,9 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
         questionGaming.setText("Preparando las respuestas...");
 
         String token = Bearer.getDefaults(Bearer.BEARER_KEY, this);
+        int idUser = Bearer.getDefaultsInt(Bearer.USER_ID_KEY, this);
+
+        Validator validator = new Validator(idUser, category.getId());
 
         RetrofitControler retrofitControler = new RetrofitControler();
         try {

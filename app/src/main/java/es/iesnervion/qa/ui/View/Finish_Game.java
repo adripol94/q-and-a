@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.github.lzyzsd.circleprogress.CircleProgress;
 
+import es.iesnervion.qa.Model.Validator;
 import es.iesnervion.qa.R;
 
 public class Finish_Game extends AppCompatActivity {
@@ -31,6 +32,10 @@ public class Finish_Game extends AppCompatActivity {
         if (i == 1) {
             cancellGamming();
         } else {
+
+
+
+
             createRating();
         }
 
@@ -63,6 +68,10 @@ public class Finish_Game extends AppCompatActivity {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(200,200);
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
         relativeLayout.addView(ratting,params);
+
+    }
+
+    private void getValidation(Validator v) {
 
     }
 

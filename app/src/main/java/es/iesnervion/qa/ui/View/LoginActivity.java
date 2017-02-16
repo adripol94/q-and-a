@@ -84,6 +84,17 @@ import static android.Manifest.permission.READ_CONTACTS;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        String token = Bearer.getDefaults(Bearer.BEARER_KEY, this);
+
+        if (token != null) {
+            Intent it = new Intent(this, MenuActivity.class);
+            startActivity(it);
+        } else {
+            buildLoggin();
+        }
+    }
+
+    private void buildLoggin(){
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -128,6 +139,7 @@ import static android.Manifest.permission.READ_CONTACTS;
             }
         });
     }
+
 
     public static float dpToPx(Context context, float valueInDp) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
@@ -325,6 +337,7 @@ import static android.Manifest.permission.READ_CONTACTS;
         showProgress(false);
         finish();
         Bearer.setDefaults(Bearer.BEARER_KEY, bearer, this);
+        Bearer.setDefaultsInt(Bearer.USER_ID_KEY, obj.getId(), this);
         Intent it = new Intent(LoginActivity.this, MenuActivity.class);
         startActivity(it);
 
