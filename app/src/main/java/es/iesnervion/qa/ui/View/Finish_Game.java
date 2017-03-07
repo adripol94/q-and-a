@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.github.lzyzsd.circleprogress.CircleProgress;
+import com.google.gson.Gson;
 
 import es.iesnervion.qa.Controller.RetrofitControler;
 import es.iesnervion.qa.Model.Bearer;
@@ -41,6 +42,8 @@ public class Finish_Game extends AppCompatActivity implements Responser<Validato
 
             Validator validator = getIntent().getParcelableExtra(Finish_Game.validator);
 
+            Gson gson = new Gson();
+
             String token = Bearer.getDefaults(Bearer.BEARER_KEY, this);
             RetrofitControler retrofitControler = new RetrofitControler();
 
@@ -52,16 +55,14 @@ public class Finish_Game extends AppCompatActivity implements Responser<Validato
                 e.printStackTrace();
             }
 
-
-
         }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent it = new Intent(Finish_Game.this, MenuActivity.class);
+                startActivity(it);
             }
         });
     }
@@ -80,12 +81,12 @@ public class Finish_Game extends AppCompatActivity implements Responser<Validato
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.finishGameRespuestasMostrar);
 
         // Cogemos el nombre de usuario
-        String user = Bearer.getDefaults(Bearer.BEARER_KEY, this);
+        String user = Bearer.getDefaults(Bearer.USER_NAME_KEY, this);
 
         ArcProgress ratting = new ArcProgress(this);
         ratting.setProgress(obj.getPoints());
         ratting.setBottomText(user);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(200,200);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(300,300);
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
         relativeLayout.addView(ratting,params);
     }

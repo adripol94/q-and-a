@@ -2,7 +2,10 @@ package es.iesnervion.qa.Model;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.Toast;
+
+import java.io.IOException;
 
 import es.iesnervion.qa.ui.View.CategoriesActivity;
 import retrofit2.Call;
@@ -35,9 +38,9 @@ public class CallBackProgress<T> implements Callback<T> {
      */
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
-        if (response.body() == null)
+        if (response.body() == null) {
             onFailure(call, new Throwable(response.message()));
-        else {
+        } else {
             lisato = response.body();
             String bearer = response.headers().get("WWW-Authenticate");
             res.onFinish(lisato, bearer);

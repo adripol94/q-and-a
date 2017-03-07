@@ -29,6 +29,7 @@ import es.iesnervion.qa.Model.Bearer;
 import es.iesnervion.qa.Model.CallBackProgress;
 import es.iesnervion.qa.Model.Category;
 import es.iesnervion.qa.Model.Question;
+import es.iesnervion.qa.Model.QuestionAnswer;
 import es.iesnervion.qa.Model.Responser;
 import es.iesnervion.qa.Model.ResponserAnswer;
 import es.iesnervion.qa.Model.TimerEndGamming;
@@ -53,6 +54,7 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
     private Timer timer;
     private Validator validator;
     private String token;
+    private QuestionAnswer questionAnswer;
     private RetrofitControler retrofitControler;
     public final static String BACK_ACTIVITY = "isBacked";
 
@@ -140,6 +142,9 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
                 ": " + q.getQuestion());
         (findViewById(R.id.question_progress)).setVisibility(View.GONE);
 
+        questionAnswer = new QuestionAnswer();
+        questionAnswer.setIdQuestion(q.getId());
+
         RecyclerView mRecyclerView = (RecyclerView)findViewById(R.id.answers_gaming_lv);
         AnswerAdapter mCategoryAdapter = new AnswerAdapter(questions.get(contadorPreguntas).getAnswer(), this);
         mRecyclerView.setAdapter(mCategoryAdapter);
@@ -151,6 +156,8 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
     @Override
     public void onAnswerSelected(Answer answer) {
         respuestas.add(answer.getAnswer());
+        questionAnswer.setIdAnswer(answer.getId());
+        validator.putAnswer(questionAnswer);
 
         if (contadorPreguntas < questions.size() -1) {
             contadorPreguntas++;
@@ -165,7 +172,6 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
     @Override
     public void isFinish(boolean timeOut) {
         Toast.makeText(this, "Juego acabado", Toast.LENGTH_SHORT).show();
-        validator.putAnswer(respuestas);
         validator.setTime(iClicks);
 
         Intent it = new Intent(this, Finish_Game.class);

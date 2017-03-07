@@ -133,8 +133,10 @@ import static android.Manifest.permission.READ_CONTACTS;
                 if (heightDiff > dpToPx(getBaseContext(), 240)) { // if more than 200 dp, it's probably a keyboard...
                     //TODO logo mas grande
                     mImageLogo.setImageResource(R.drawable.logo_small);
+                    (findViewById(R.id.email_sign_in_button)).setVisibility(View.INVISIBLE);
                 } else {
                     mImageLogo.setImageResource(R.drawable.logo_big);
+                    (findViewById(R.id.email_sign_in_button)).setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -338,7 +340,7 @@ import static android.Manifest.permission.READ_CONTACTS;
         finish();
         Bearer.setDefaults(Bearer.BEARER_KEY, bearer, this);
         Bearer.setDefaultsInt(Bearer.USER_ID_KEY, obj.getId(), this);
-        Bearer.setDefaults(Bearer.USER_NAME_KEY, obj.getSurname(), this);
+        Bearer.setDefaults(Bearer.USER_NAME_KEY, obj.getUser(), this);
         Intent it = new Intent(LoginActivity.this, MenuActivity.class);
         startActivity(it);
 

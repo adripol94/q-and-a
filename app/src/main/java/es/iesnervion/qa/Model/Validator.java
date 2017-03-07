@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,28 +18,38 @@ import java.util.HashMap;
  * Clase principal para la validacion de las repuestas.
  */
 public class Validator implements Parcelable {
+    @SerializedName("idUser")
     private int idUser;
+    @SerializedName("idCategory")
     private int idCategory;
+    @SerializedName("time")
     private int time;
+    @SerializedName("points")
     private int points;
-    private ArrayList<String> questionAnswers;
+    @SerializedName("answers")
+    private ArrayList<QuestionAnswer> answers;
 
     public Validator(int idUser, int idCategory,int time) {
         this.idUser = idUser;
         this.idCategory = idCategory;
         this.time = time;
-
+        answers = new ArrayList<>();
     }
 
     public Validator(int idCategory, int idUser) {
         this.idCategory = idCategory;
         this.idUser = idUser;
+        answers = new ArrayList<>();
     }
 
     public Validator(){}
 
-    public void putAnswer(ArrayList<String> resp) {
-        questionAnswers = resp;
+    public void putAnswer(QuestionAnswer qa) {
+        answers.add(qa);
+    }
+
+    public void putAnswers(ArrayList<QuestionAnswer> resp) {
+        answers = resp;
     }
 
     public int getIdUser() {
@@ -81,14 +93,17 @@ public class Validator implements Parcelable {
         dest.writeInt(this.idUser);
         dest.writeInt(this.idCategory);
         dest.writeInt(this.time);
-        dest.writeStringList(this.questionAnswers);
+        dest.writeInt(this.points);
+        dest.writeList(this.answers);
     }
 
     protected Validator(Parcel in) {
         this.idUser = in.readInt();
         this.idCategory = in.readInt();
         this.time = in.readInt();
-        this.questionAnswers = in.createStringArrayList();
+        this.points = in.readInt();
+        this.answers = new ArrayList<QuestionAnswer>();
+        in.readList(this.answers, QuestionAnswer.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<Validator> CREATOR = new Parcelable.Creator<Validator>() {
