@@ -6,6 +6,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -29,6 +30,10 @@ public interface RetrofitInterfaceQA {
 
     @POST("user")
     Call<User> createUser(@Header("WWW-Authenticate") String token, @Body User user);
+
+    @Headers({"Content-type: application/json", "Accept: application/json"})
+    @POST("validation")
+    Call<Validator> makeValidation(@Header("WWW-Authenticate") String token, @Body Validator validator);
 
     @GET("user")
     Call<User> getUser(@Header("WWW-Authenticate") String token, @Query("email") String email);

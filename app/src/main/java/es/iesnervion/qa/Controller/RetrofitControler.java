@@ -9,6 +9,7 @@ import es.iesnervion.qa.Model.Category;
 import es.iesnervion.qa.Model.Question;
 import es.iesnervion.qa.Model.RetrofitInterfaceQA;
 import es.iesnervion.qa.Model.User;
+import es.iesnervion.qa.Model.Validator;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -57,6 +58,12 @@ public class RetrofitControler {
 
     public Call<List<Question>> getListQuestionByCategory(String token, String idCategory) {
         Call<List<Question>> call = service.getListQuestionsByCategory(token, idCategory);
+
+        return call;
+    }
+
+    public Call<Validator> postValidationPoints(String token, Validator validator) {
+        Call<Validator> call = service.makeValidation(token, validator);
 
         return call;
     }

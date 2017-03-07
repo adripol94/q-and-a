@@ -14,10 +14,17 @@ import android.widget.TextView;
 import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.github.lzyzsd.circleprogress.CircleProgress;
 
+import es.iesnervion.qa.Controller.RetrofitControler;
+import es.iesnervion.qa.Model.Bearer;
+import es.iesnervion.qa.Model.CallBackProgress;
+import es.iesnervion.qa.Model.Responser;
 import es.iesnervion.qa.Model.Validator;
 import es.iesnervion.qa.R;
+import retrofit2.Call;
 
-public class Finish_Game extends AppCompatActivity {
+public class Finish_Game extends AppCompatActivity implements Responser<Validator> {
+
+    public final static String validator = "Validator";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,15 +35,25 @@ public class Finish_Game extends AppCompatActivity {
 
         int i = getIntent().getIntExtra(GamingActivity.BACK_ACTIVITY, 0);
 
-
         if (i == 1) {
             cancellGamming();
         } else {
 
+            Validator validator = getIntent().getParcelableExtra(Finish_Game.validator);
+
+            String token = Bearer.getDefaults(Bearer.BEARER_KEY, this);
+            RetrofitControler retrofitControler = new RetrofitControler();
+
+            try {
+                Call<Validator> listCall = retrofitControler.postValidationPoints(token, validator);
+                listCall.enqueue(new CallBackProgress<Validator>(this, this));
+            } catch (Exception e) {
+                //TODO for depure
+                e.printStackTrace();
+            }
 
 
 
-            createRating();
         }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -59,20 +76,29 @@ public class Finish_Game extends AppCompatActivity {
         relativeLayout.addView(tv,params);
     }
 
-    private void createRating() {
+    private void createRating(Validator obj) {
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.finishGameRelativeLayout);
 
+        // Cogemos el nombre de usuario
+        String user = Bearer.getDefaults(Bearer.BEARER_KEY, this);
+
         ArcProgress ratting = new ArcProgress(this);
-        ratting.setProgress(50);
-        ratting.setBottomText("Luis");
+        ratting.setProgress(obj.getPoints());
+        ratting.setBottomText(user);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(200,200);
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
         relativeLayout.addView(ratting,params);
-
     }
 
-    private void getValidation(Validator v) {
-
+    @Override
+    public void onFinish(Validator obj, String bearer) {
+        findViewById(R.id.finishGameCargaResp).setVisibility(View.GONE);
+        findViewById(R.id.finishGameRespuestasMostrar).setVisibility(View.VISIBLE);
+        createRating(obj);
     }
 
+    @Override
+    public void onFailure(Throwable t) {
+
+    }
 }

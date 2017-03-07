@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.github.lzyzsd.circleprogress.CircleProgress;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
@@ -47,9 +48,12 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
     private View mProgressView;
     private List<Question> questions;
     private int contadorPreguntas;
-    private HashMap<Integer, Integer> respuestas;
+    private ArrayList<String> respuestas;
     private TextView questionGaming;
     private Timer timer;
+    private Validator validator;
+    private String token;
+    private RetrofitControler retrofitControler;
     public final static String BACK_ACTIVITY = "isBacked";
 
 
@@ -67,19 +71,19 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
         questionGaming = (TextView)findViewById(R.id.question_gaming_tv);
         RelativeLayout rl = (RelativeLayout)findViewById(R.id.stackPanel_clockGamming);
         contadorPreguntas = 0;
-        respuestas = new HashMap<>();
+        respuestas = new ArrayList<>();
         timer = new Timer();
 
         rl.setBackground(new BitmapDrawable(getResources(), category.getImgBitMap()));
 
         questionGaming.setText("Preparando las respuestas...");
 
-        String token = Bearer.getDefaults(Bearer.BEARER_KEY, this);
+        token = Bearer.getDefaults(Bearer.BEARER_KEY, this);
         int idUser = Bearer.getDefaultsInt(Bearer.USER_ID_KEY, this);
 
-        Validator validator = new Validator(idUser, category.getId());
+        validator = new Validator(idUser, category.getId());
 
-        RetrofitControler retrofitControler = new RetrofitControler();
+        retrofitControler = new RetrofitControler();
         try {
             Call<List<Question>> listCall = retrofitControler.getListQuestionByCategory(token,
                     String.valueOf(category.getId()));
@@ -146,7 +150,7 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
 
     @Override
     public void onAnswerSelected(Answer answer) {
-        respuestas.put(questions.get(contadorPreguntas).getId(), answer.getId());
+        respuestas.add(answer.getAnswer());
 
         if (contadorPreguntas < questions.size() -1) {
             contadorPreguntas++;
@@ -161,7 +165,13 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
     @Override
     public void isFinish(boolean timeOut) {
         Toast.makeText(this, "Juego acabado", Toast.LENGTH_SHORT).show();
+        validator.putAnswer(respuestas);
+        validator.setTime(iClicks);
+
         Intent it = new Intent(this, Finish_Game.class);
+        it.putExtra(Finish_Game.validator, validator);
+        if (timeOut)
+            it.putExtra(GamingActivity.BACK_ACTIVITY, 1);
         startActivity(it);
     }
 

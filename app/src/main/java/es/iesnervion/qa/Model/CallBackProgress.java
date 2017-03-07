@@ -21,7 +21,6 @@ public class CallBackProgress<T> implements Callback<T> {
 
     public CallBackProgress(Responser r, Context c) {
         this.c = c;
-        //Exception here
         res = r;
     }
 

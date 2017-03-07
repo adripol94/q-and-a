@@ -338,6 +338,7 @@ import static android.Manifest.permission.READ_CONTACTS;
         finish();
         Bearer.setDefaults(Bearer.BEARER_KEY, bearer, this);
         Bearer.setDefaultsInt(Bearer.USER_ID_KEY, obj.getId(), this);
+        Bearer.setDefaults(Bearer.USER_NAME_KEY, obj.getSurname(), this);
         Intent it = new Intent(LoginActivity.this, MenuActivity.class);
         startActivity(it);
 
