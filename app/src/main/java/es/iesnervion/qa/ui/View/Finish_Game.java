@@ -67,7 +67,7 @@ public class Finish_Game extends AppCompatActivity implements Responser<Validato
     }
 
     private void cancellGamming() {
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.finishGameRelativeLayout);
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.finishGameRespuestasMostrar);
         TextView tv = new TextView(this);
         tv.setText("Has salido de la partida");
 
@@ -77,7 +77,7 @@ public class Finish_Game extends AppCompatActivity implements Responser<Validato
     }
 
     private void createRating(Validator obj) {
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.finishGameRelativeLayout);
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.finishGameRespuestasMostrar);
 
         // Cogemos el nombre de usuario
         String user = Bearer.getDefaults(Bearer.BEARER_KEY, this);
