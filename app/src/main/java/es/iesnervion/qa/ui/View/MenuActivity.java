@@ -43,7 +43,8 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Bearer.delDefaults(v.getContext());
-                finish();
+                //Comando para matar el proceso de la aplicacion
+                finishAffinity();
             }
         });
 

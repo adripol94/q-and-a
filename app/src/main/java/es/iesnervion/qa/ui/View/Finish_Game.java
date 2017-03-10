@@ -43,6 +43,7 @@ public class Finish_Game extends AppCompatActivity implements Responser<Validato
             Validator validator = getIntent().getParcelableExtra(Finish_Game.validator);
 
             Gson gson = new Gson();
+            String a = gson.toJson(validator);
 
             String token = Bearer.getDefaults(Bearer.BEARER_KEY, this);
             RetrofitControler retrofitControler = new RetrofitControler();

@@ -19,6 +19,15 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:visibility="visible" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:id="@+id/txtInformacionGamming"
+        android:text="Cargando Preguntas"
+        android:layout_centerInParent="true" />
+
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -62,6 +71,15 @@
         android:layout_margin="5dp"
         android:layout_gravity="bottom|center">
     </android.support.v7.widget.RecyclerView>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:progressTint="@color/colorGame"
+        android:id="@+id/progressBarAnswerCount" />
 
 
 </RelativeLayout>

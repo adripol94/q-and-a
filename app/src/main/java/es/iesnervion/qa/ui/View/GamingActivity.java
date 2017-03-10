@@ -3,22 +3,23 @@ package es.iesnervion.qa.ui.View;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.github.lzyzsd.circleprogress.CircleProgress;
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -28,6 +29,8 @@ import es.iesnervion.qa.Model.Answer;
 import es.iesnervion.qa.Model.Bearer;
 import es.iesnervion.qa.Model.CallBackProgress;
 import es.iesnervion.qa.Model.Category;
+import es.iesnervion.qa.Model.Game;
+import es.iesnervion.qa.Model.IdQuestion;
 import es.iesnervion.qa.Model.Question;
 import es.iesnervion.qa.Model.QuestionAnswer;
 import es.iesnervion.qa.Model.Responser;
@@ -41,9 +44,15 @@ import retrofit2.Call;
 /**
  * IMPORTANTE: Ir al Manifest, esta actividad no se guarda en la pila de actividades
  */
-public class GamingActivity extends AppCompatActivity implements Responser<List<Question>>, ResponserAnswer, TimerEndGamming{
+public class GamingActivity extends AppCompatActivity implements ResponserAnswer, TimerEndGamming {
     private MediaPlayer mediaPlayer;
+    private MediaPlayer mediaAnswerCorrectPlayer;
+    private MediaPlayer mediaAnswerErrorPlayer;
     private int iClicks = 0;
+    private int idGame;
+    private int numPreguntas;
+    private ProgressBar progressBarAnswerCount;
+    private boolean isFinishGameRequest;
     private static final String CLICK_VALUE = "click_value";
     private CircleProgress arcClicks;
     private View mProgressView;
@@ -56,6 +65,9 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
     private String token;
     private QuestionAnswer questionAnswer;
     private RetrofitControler retrofitControler;
+    private ResponsePreguntas responsePreguntas;
+    private ResponseGame responseGame;
+    private Category category;
     public final static String BACK_ACTIVITY = "isBacked";
 
 
@@ -64,10 +76,22 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gaming);
 
-        Category category = getIntent().getParcelableExtra(Category.CATEGORY_KEY);
+        category = getIntent().getParcelableExtra(Category.CATEGORY_KEY);
 
+        isFinishGameRequest = false;
+        idGame = 0;
+        numPreguntas = 0;
+
+        //Inicializacion de las interfaces!!!!!!!!!!!
+        responsePreguntas = new ResponsePreguntas();
+        responseGame = new ResponseGame();
+
+        progressBarAnswerCount = (ProgressBar)findViewById(R.id.progressBarAnswerCount);
 
         mediaPlayer = MediaPlayer.create(this, R.raw.music);
+        mediaAnswerCorrectPlayer = MediaPlayer.create(this, R.raw.success);
+        mediaAnswerErrorPlayer = MediaPlayer.create(this, R.raw.error);
+
         arcClicks = (CircleProgress) findViewById(R.id.clock_gaming_pb);
         mProgressView = findViewById(R.id.login_progress);
         questionGaming = (TextView)findViewById(R.id.question_gaming_tv);
@@ -89,7 +113,7 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
         try {
             Call<List<Question>> listCall = retrofitControler.getListQuestionByCategory(token,
                     String.valueOf(category.getId()));
-            listCall.enqueue(new CallBackProgress<List<Question>>(this, this));
+            listCall.enqueue(new CallBackProgress<List<Question>>(responsePreguntas, this));
         } catch (Exception e) {
             //TODO for depure
             e.printStackTrace();
@@ -109,15 +133,6 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
         mediaPlayer.stop();
     }
 
-    @Override
-    public void onFinish(List<Question> obj, String bearer) {
-        questions = obj;
-        if (!mediaPlayer.isPlaying())
-            mediaPlayer.start();
-
-        setQuestions(questions.get(contadorPreguntas));
-    }
-
     /**
      * Take care of popping the fragment back stack or finishing the activity
      * as appropriate.
@@ -129,11 +144,6 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
         startActivity(it);
     }
 
-    @Override
-    public void onFailure(Throwable t) {
-
-    }
-
     private void setQuestions(Question q) {
         if (contadorPreguntas == 0)
             timer.schedule(new RunClock(this), 0, 1000);
@@ -141,6 +151,7 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
         questionGaming.setText("Pregunta " + (contadorPreguntas + 1) +
                 ": " + q.getQuestion());
         (findViewById(R.id.question_progress)).setVisibility(View.GONE);
+        findViewById(R.id.txtInformacionGamming).setVisibility(View.GONE);
 
         questionAnswer = new QuestionAnswer();
         questionAnswer.setIdQuestion(q.getId());
@@ -150,7 +161,6 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
         mRecyclerView.setAdapter(mCategoryAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setHasFixedSize(true);
-
     }
 
     @Override
@@ -158,6 +168,21 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
         respuestas.add(answer.getAnswer());
         questionAnswer.setIdAnswer(answer.getId());
         validator.putAnswer(questionAnswer);
+        numPreguntas++;
+
+        if (answer.isCorrect()) {
+            progressBarAnswerCount.setProgress(numPreguntas * 100 / questions.size());
+            //Tenemos problemas cuando responden demasiado rapido no se escucha
+            //Por eso tenemos que parar el audio y resetear volviendo a implementar el audio incluso.
+            if (mediaAnswerCorrectPlayer.isPlaying()) {
+                mediaAnswerCorrectPlayer.stop();
+                mediaAnswerCorrectPlayer.reset();
+                mediaAnswerCorrectPlayer = MediaPlayer.create(this, R.raw.success);
+            }
+            mediaAnswerCorrectPlayer.start();
+        } else {
+            mediaAnswerErrorPlayer.start();
+        }
 
         if (contadorPreguntas < questions.size() -1) {
             contadorPreguntas++;
@@ -171,8 +196,28 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
 
     @Override
     public void isFinish(boolean timeOut) {
+        ProgressBar progressBar = null;
+        TextView textView = null;
         Toast.makeText(this, "Juego acabado", Toast.LENGTH_SHORT).show();
         validator.setTime(iClicks);
+
+        //Nunca se generará un idQuestion de Game inferior a 1, mientras que sea 0 o no haya
+        // recibido respuesta
+        while (idGame != 0 && !isFinishGameRequest) {
+            textView = (TextView)findViewById(R.id.txtInformacionGamming);
+            progressBar = (ProgressBar)findViewById(R.id.question_progress);
+
+            textView.setText("Esperando al servidor...");
+            textView.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        if (progressBar != null) {
+            textView.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+        }
+
+        validator.setIdGame(idGame);
 
         Intent it = new Intent(this, Finish_Game.class);
         it.putExtra(Finish_Game.validator, validator);
@@ -214,6 +259,51 @@ public class GamingActivity extends AppCompatActivity implements Responser<List<
                 }
             });
 
+
+        }
+    }
+
+    public class ResponsePreguntas implements Responser<List<Question>> {
+
+        @Override
+        public void onFinish(List<Question> obj, String bearer) {
+            int idUser = Bearer.getDefaultsInt(Bearer.USER_ID_KEY, GamingActivity.this);
+            questions = obj;
+
+            List<IdQuestion> idsQuestions = new ArrayList<>();
+            //Solo para API 7.0 obj.forEach(x -> idsQuestions.add(x.getId()));
+            for (Question q : questions)
+                idsQuestions.add(new IdQuestion(q.getId()));
+
+            retrofitControler = new RetrofitControler();
+            Call<Game> gameCall = retrofitControler.postGame(token, new Game(category.getId(),
+                    idUser, 1, idsQuestions));
+            gameCall.enqueue(new CallBackProgress<Game>(responseGame, GamingActivity.this));
+
+            if (!mediaPlayer.isPlaying())
+                mediaPlayer.start();
+
+            setQuestions(questions.get(contadorPreguntas));
+        }
+
+        @Override
+        public void onFailure(Throwable t) {
+
+        }
+
+    }
+
+    public class ResponseGame implements Responser<Game> {
+
+        @Override
+        public void onFinish(Game obj, String bearer) {
+            idGame = obj.getIdGame();
+            isFinishGameRequest = true;
+        }
+
+        @Override
+        public void onFailure(Throwable t) {
+            isFinishGameRequest = true;
 
         }
     }

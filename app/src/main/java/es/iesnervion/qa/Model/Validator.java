@@ -18,6 +18,8 @@ import java.util.HashMap;
  * Clase principal para la validacion de las repuestas.
  */
 public class Validator implements Parcelable {
+    @SerializedName("idGame")
+    private int idGame;
     @SerializedName("idUser")
     private int idUser;
     @SerializedName("idCategory")
@@ -43,6 +45,14 @@ public class Validator implements Parcelable {
     }
 
     public Validator(){}
+
+    public int getIdGame() {
+        return idGame;
+    }
+
+    public void setIdGame(int idGame) {
+        this.idGame = idGame;
+    }
 
     public void putAnswer(QuestionAnswer qa) {
         answers.add(qa);
@@ -90,20 +100,21 @@ public class Validator implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.idGame);
         dest.writeInt(this.idUser);
         dest.writeInt(this.idCategory);
         dest.writeInt(this.time);
         dest.writeInt(this.points);
-        dest.writeList(this.answers);
+        dest.writeTypedList(this.answers);
     }
 
     protected Validator(Parcel in) {
+        this.idGame = in.readInt();
         this.idUser = in.readInt();
         this.idCategory = in.readInt();
         this.time = in.readInt();
         this.points = in.readInt();
-        this.answers = new ArrayList<QuestionAnswer>();
-        in.readList(this.answers, QuestionAnswer.class.getClassLoader());
+        this.answers = in.createTypedArrayList(QuestionAnswer.CREATOR);
     }
 
     public static final Parcelable.Creator<Validator> CREATOR = new Parcelable.Creator<Validator>() {

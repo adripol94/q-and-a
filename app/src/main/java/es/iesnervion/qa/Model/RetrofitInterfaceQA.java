@@ -36,6 +36,10 @@ public interface RetrofitInterfaceQA {
     @Headers("Content-type: application/json")
     Call<Validator> makeValidation(@Header("WWW-Authenticate") String token, @Body Validator body);
 
+    @POST("game")
+    @Headers("Content-type: application/json")
+    Call<Game> postGame(@Header("WWW-Authenticate") String token, @Body Game body);
+
     @GET("user")
     Call<User> getUser(@Header("WWW-Authenticate") String token, @Query("email") String email);
 }

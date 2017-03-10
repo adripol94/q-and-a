@@ -17,7 +17,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="backButton">Volver al menu pincipa</string>
-    <string name="cargando_content_categories_tv">Cargando</string>
+    <string name="cargando_content_categories_tv">Cargando Categorias</string>
 
     <string name="cargando_preguntas">Cargando las preguntas...</string>
     <string name="title_activity_finish__game">Finish_Game</string>

@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import java.util.List;
 
 import es.iesnervion.qa.Model.Category;
+import es.iesnervion.qa.Model.Game;
 import es.iesnervion.qa.Model.Question;
 import es.iesnervion.qa.Model.RetrofitInterfaceQA;
 import es.iesnervion.qa.Model.User;
@@ -77,6 +78,11 @@ public class RetrofitControler {
     public Call<User> getUserByName(String token, String name) {
         Call<User> call = service.getUser(token, name);
 
+        return call;
+    }
+
+    public Call<Game> postGame(String token, Game game) {
+        Call<Game> call = service.postGame(token, game);
         return call;
     }
 }

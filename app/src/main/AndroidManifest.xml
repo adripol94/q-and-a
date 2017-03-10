@@ -39,14 +39,12 @@
             android:label="@string/title_activity_game_list"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.View.GamingActivity"
-            android:noHistory="true"
-            android:launchMode="singleInstance"></activity>
+            android:noHistory="true"></activity>
 
         <activity
             android:name=".ui.View.Finish_Game"
             android:label="@string/title_activity_finish__game"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:launchMode="singleInstance"></activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
