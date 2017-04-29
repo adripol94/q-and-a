@@ -6,6 +6,6 @@ jugadores y diseñar sus propias preguntas. Estas preguntas tendrán un tiempo y
 
 -----------------------------------------------------------------------------------------------------------------------------
 
-Just updated: 25.0.0 -> Reason: Implanted BaseGameUtil for Real-Time.
+19:40 - 29:04:2017 - Just updated: 25.0.0 -> Reason: Implanted BaseGameUtil for Real-Time.
 
 -----------------------------------------------------------------------------------------------------------------------------
