@@ -55,4 +55,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.github.lzyzsd:circleprogress:1.2.1'
     compile 'org.apache.ant:ant:1.7.0'
+    compile project(':multiplayers')
 }
