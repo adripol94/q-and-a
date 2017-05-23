@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/loginId"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal"
     android:noHistory="true"
     android:orientation="vertical"
@@ -34,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/logo"
-                android:maxHeight="300dp"
+                android:maxHeight="200dp"
                 android:src="@drawable/logo_big"
                 android:adjustViewBounds="true"
                 android:layout_gravity="center"/>
@@ -84,4 +83,5 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
+
 </LinearLayout>

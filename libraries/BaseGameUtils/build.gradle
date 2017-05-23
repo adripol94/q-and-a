@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0'
+        classpath 'com.android.tools.build:gradle:2.3.2'
     }
 }
 
@@ -22,7 +22,7 @@ dependencies {
         ext.gms_library_version = '8.4.0'
     }
 
-    compile "com.android.support:appcompat-v7:${appcompat_library_version}"
+    compile "com.android.support:appcompat-v7:${support_library_version}"
     compile "com.android.support:support-v4:${support_library_version}"
     compile "com.google.android.gms:play-services-games:${gms_library_version}"
     compile "com.google.android.gms:play-services-plus:${gms_library_version}"

@@ -3,32 +3,30 @@ package es.iesnervion.qa.ui.View;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-
+import android.content.Context;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -36,6 +34,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.drive.Drive;
+import com.google.android.gms.games.Games;
+import com.google.example.games.basegameutils.BaseGameUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +57,7 @@ import es.iesnervion.qa.R;
 import retrofit2.Call;
 
 import static android.Manifest.permission.READ_CONTACTS;
+import static android.content.ContentValues.TAG;
 
 /**
  * A login screen that offers login via email/password.
@@ -59,6 +68,8 @@ import static android.Manifest.permission.READ_CONTACTS;
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
+
+    private static final int REQUEST_CODE_GOOGLE_LOGIN = 2030;
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -87,11 +98,16 @@ import static android.Manifest.permission.READ_CONTACTS;
         String token = Bearer.getDefaults(Bearer.BEARER_KEY, this);
 
         if (token != null) {
-            Intent it = new Intent(this, MenuActivity.class);
-            startActivity(it);
+            goToMenuActivity();
         } else {
             buildLoggin();
         }
+    }
+
+    public void goToMenuActivity() {
+        Intent it = new Intent(LoginActivity.this, MenuActivity.class);
+        startActivity(it);
+
     }
 
     private void buildLoggin(){
@@ -112,13 +128,7 @@ import static android.Manifest.permission.READ_CONTACTS;
         });
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-
-            }
-        });
+        mEmailSignInButton.setOnClickListener(view -> attemptLogin());
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
@@ -126,18 +136,15 @@ import static android.Manifest.permission.READ_CONTACTS;
         mImageLogo = (ImageView)findViewById(R.id.logo);
 
         final View activityRootView = ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
-        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                int heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight();
-                if (heightDiff > dpToPx(getBaseContext(), 240)) { // if more than 200 dp, it's probably a keyboard...
-                    //TODO logo mas grande
-                    mImageLogo.setImageResource(R.drawable.logo_small);
-                    (findViewById(R.id.email_sign_in_button)).setVisibility(View.INVISIBLE);
-                } else {
-                    mImageLogo.setImageResource(R.drawable.logo_big);
-                    (findViewById(R.id.email_sign_in_button)).setVisibility(View.VISIBLE);
-                }
+        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            int heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight();
+            if (heightDiff > dpToPx(getBaseContext(), 240)) { // if more than 200 dp, it's probably a keyboard...
+                //TODO logo mas grande
+                mImageLogo.setImageResource(R.drawable.logo_small);
+                (findViewById(R.id.email_sign_in_button)).setVisibility(View.INVISIBLE);
+            } else {
+                mImageLogo.setImageResource(R.drawable.logo_big);
+                (findViewById(R.id.email_sign_in_button)).setVisibility(View.VISIBLE);
             }
         });
     }
@@ -165,13 +172,7 @@ import static android.Manifest.permission.READ_CONTACTS;
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
             Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
+                    .setAction(android.R.string.ok, v -> requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS));
         } else {
             requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
         }
@@ -190,7 +191,6 @@ import static android.Manifest.permission.READ_CONTACTS;
             }
         }
     }
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -338,11 +338,12 @@ import static android.Manifest.permission.READ_CONTACTS;
         mAuthTask = null;
         showProgress(false);
         finish();
+
         Bearer.setDefaults(Bearer.BEARER_KEY, bearer, this);
         Bearer.setDefaultsInt(Bearer.USER_ID_KEY, obj.getId(), this);
         Bearer.setDefaults(Bearer.USER_NAME_KEY, obj.getUser(), this);
-        Intent it = new Intent(LoginActivity.this, MenuActivity.class);
-        startActivity(it);
+
+        goToMenuActivity();
 
     }
 
@@ -355,7 +356,6 @@ import static android.Manifest.permission.READ_CONTACTS;
         mPasswordView.requestFocus();
 
     }
-
 
     private interface ProfileQuery {
         String[] PROJECTION = {
