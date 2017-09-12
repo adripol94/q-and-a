@@ -1,15 +1,13 @@
-package es.iesnervion.qa.Model;
+package es.iesnervion.qa.model;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -29,6 +27,7 @@ public interface RetrofitInterfaceQA {
     @GET("category")
     Call<List<Category>> listCategory(@Header("WWW-Authenticate") String token);
 
+    @Deprecated
     @POST("user")
     Call<User> createUser(@Header("WWW-Authenticate") String token, @Body User user);
 
@@ -42,4 +41,7 @@ public interface RetrofitInterfaceQA {
 
     @GET("user")
     Call<User> getUser(@Header("WWW-Authenticate") String token, @Query("email") String email);
+
+    @POST("connect")
+    Call<GoogleUser> postConnect(@Header("WWW-Authenticate") String token);
 }

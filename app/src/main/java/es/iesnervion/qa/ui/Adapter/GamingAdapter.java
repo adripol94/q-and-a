@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import es.iesnervion.qa.Model.Answer;
+import es.iesnervion.qa.model.Answer;
 import es.iesnervion.qa.R;
 
 import static es.iesnervion.qa.R.layout.template_gaming;

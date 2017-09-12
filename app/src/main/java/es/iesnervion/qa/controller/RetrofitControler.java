@@ -1,16 +1,17 @@
-package es.iesnervion.qa.Controller;
+package es.iesnervion.qa.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
-import es.iesnervion.qa.Model.Category;
-import es.iesnervion.qa.Model.Game;
-import es.iesnervion.qa.Model.Question;
-import es.iesnervion.qa.Model.RetrofitInterfaceQA;
-import es.iesnervion.qa.Model.User;
-import es.iesnervion.qa.Model.Validator;
+import es.iesnervion.qa.model.Category;
+import es.iesnervion.qa.model.Game;
+import es.iesnervion.qa.model.GoogleUser;
+import es.iesnervion.qa.model.Question;
+import es.iesnervion.qa.model.RetrofitInterfaceQA;
+import es.iesnervion.qa.model.User;
+import es.iesnervion.qa.model.Validator;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -83,6 +84,17 @@ public class RetrofitControler {
 
     public Call<Game> postGame(String token, Game game) {
         Call<Game> call = service.postGame(token, game);
+        return call;
+    }
+
+    /**
+     * Connecta con el servidor con el token, en este caso el token tendra el nombre de usuario
+     * conectado (por GoogleApiClient).
+     * @param token Games Player Class -> Name of user.
+     * @return
+     */
+    public Call<GoogleUser> postConnection(String token) {
+        Call<GoogleUser> call = service.postConnect(token);
         return call;
     }
 }

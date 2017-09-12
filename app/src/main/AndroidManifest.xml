@@ -22,14 +22,15 @@
         <activity android:name=".ui.View.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.View.LoginActivity"
+        <activity
+            android:name=".ui.View.LoginActivity"
             android:noHistory="true"
-            android:resizeableActivity="true"/>
+            android:resizeableActivity="true" />
         <activity
             android:name=".ui.View.MenuActivity"
             android:launchMode="singleTop"
@@ -49,6 +50,9 @@
             android:name=".ui.View.Finish_Game"
             android:label="@string/title_activity_finish__game"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.View.FriendsActivity" />
+        <activity android:name=".ui.View.OneOrMultiplePlayers" />
+        <activity android:name=".ui.View.Loadactivity"></activity>
     </application>
 
 </manifest>

@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,26 +16,25 @@ import android.widget.Toast;
 
 import com.github.lzyzsd.circleprogress.CircleProgress;
 import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import es.iesnervion.qa.Controller.RetrofitControler;
-import es.iesnervion.qa.Model.Answer;
-import es.iesnervion.qa.Model.Bearer;
-import es.iesnervion.qa.Model.CallBackProgress;
-import es.iesnervion.qa.Model.Category;
-import es.iesnervion.qa.Model.Game;
-import es.iesnervion.qa.Model.IdQuestion;
-import es.iesnervion.qa.Model.Question;
-import es.iesnervion.qa.Model.QuestionAnswer;
-import es.iesnervion.qa.Model.Responser;
-import es.iesnervion.qa.Model.ResponserAnswer;
-import es.iesnervion.qa.Model.TimerEndGamming;
-import es.iesnervion.qa.Model.Validator;
+import es.iesnervion.qa.controller.RetrofitControler;
+import es.iesnervion.qa.model.Answer;
+import es.iesnervion.qa.model.Bearer;
+import es.iesnervion.qa.model.CallBackProgress;
+import es.iesnervion.qa.model.Category;
+import es.iesnervion.qa.model.Game;
+import es.iesnervion.qa.model.IdQuestion;
+import es.iesnervion.qa.model.Question;
+import es.iesnervion.qa.model.QuestionAnswer;
+import es.iesnervion.qa.model.Responser;
+import es.iesnervion.qa.model.ResponserAnswer;
+import es.iesnervion.qa.model.TimerEndGamming;
+import es.iesnervion.qa.model.Validator;
 import es.iesnervion.qa.R;
 import es.iesnervion.qa.ui.Adapter.AnswerAdapter;
 import retrofit2.Call;
@@ -276,8 +274,10 @@ public class GamingActivity extends AppCompatActivity implements ResponserAnswer
                 idsQuestions.add(new IdQuestion(q.getId()));
 
             retrofitControler = new RetrofitControler();
-            Call<Game> gameCall = retrofitControler.postGame(token, new Game(category.getId(),
-                    idUser, 1, idsQuestions));
+            Game g = new Game(category.getId(),
+                    idUser, 1, idsQuestions);
+            String a = new Gson().toJson(g);
+            Call<Game> gameCall = retrofitControler.postGame(token, g);
             gameCall.enqueue(new CallBackProgress<Game>(responseGame, GamingActivity.this));
 
             if (!mediaPlayer.isPlaying())

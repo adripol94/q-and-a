@@ -1,4 +1,4 @@
-package es.iesnervion.qa.Model;
+package es.iesnervion.qa.model;
 
 /**
  * Created by apol on 1/02/17.

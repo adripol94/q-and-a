@@ -1,18 +1,15 @@
-package es.iesnervion.qa.Model;
+package es.iesnervion.qa.model;
 
 /**
  * Created by adripol94 on 1/27/17.
  */
 
-import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Clase principal para la validacion de las repuestas.

@@ -33,26 +33,13 @@
             android:layout_below="@id/logo"
             android:layout_marginTop="30dp" />
 
-        <!-- Button
-            android:id="@+id/access_to_signin"
-            style="?android:textAppearanceSmall"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:text="@string/sign_in"
-            android:layout_alignTop="@+id/sign_in_button"
-            android:layout_alignEnd="@+id/logo" /-->
-
-        <!-- Button
-            android:id="@+id/access_sing_up"
-            style="?android:textAppearanceSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:text="@string/sign_up"
-            android:layout_below="@+id/access_to_signin"
+            android:layout_below="@id/sign_in_button"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp" / -->
+            android:layout_marginTop="30dp"
+            android:id="@+id/information_label"/>
 
 
     </RelativeLayout>

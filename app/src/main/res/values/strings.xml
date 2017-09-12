@@ -31,4 +31,5 @@
     <string name="welcome_message">Bienvenido de nuevo!</string>
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
+    <string name="connectToApiFailure"><![CDATA[Lo sentimos, estas conectado a Google pero por algun problema no podemos acceder a Q&A, intentalo en otro momento]]></string>
 </resources>

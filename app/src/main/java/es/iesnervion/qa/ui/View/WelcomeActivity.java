@@ -1,12 +1,12 @@
 package es.iesnervion.qa.ui.View;
 
 import android.content.Intent;
-import android.os.Parcelable;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.widget.Button;
+import android.util.Base64;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -14,19 +14,26 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.games.Games;
+import com.google.android.gms.games.Player;
 import com.google.example.games.basegameutils.BaseGameUtils;
 
-import java.io.Serializable;
-
-import es.iesnervion.qa.Model.Bearer;
+import es.iesnervion.qa.controller.RetrofitControler;
+import es.iesnervion.qa.model.Bearer;
+import es.iesnervion.qa.model.CallBackProgress;
+import es.iesnervion.qa.model.GoogleUser;
+import es.iesnervion.qa.model.Responser;
 import es.iesnervion.qa.R;
+import retrofit2.Call;
 
 public class WelcomeActivity extends AppCompatActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        Responser<GoogleUser> {
 
     // Google references
     private static int RC_SIGN_IN = 9001;
     public static int RC_SIGN_OUT = 9002;
+    // Cuando se puelsa al boton exit da como resultado ese flag
+    private int FLAG_SIGNOUT = 335544320;
     private GoogleApiClient mGoogleApiClient;
     private boolean mExplicitSignOut = false;
     private boolean mInSignInFlow = false;
@@ -34,25 +41,33 @@ public class WelcomeActivity extends AppCompatActivity implements
     private boolean mResolvingConnectionFailure = false;
     private boolean mAutoStartSignInflow = true;
     private boolean mSignInClicked = false;
+    private boolean mSignOutClicked = false;
+
+    private RetrofitControler retrofitControler;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        ((TextView) findViewById(R.id.information_label)).setText("");
 
-        String token = Bearer.getDefaults(Bearer.BEARER_KEY, this);
+        Intent it = getIntent();
 
-        if (token != null) {
-            goToMenuActivity();
-        } else {
-            buildView();
-            buildGoogle();
+        if (it != null && it.getFlags() == FLAG_SIGNOUT) {
+            //En este caso se ha salido de la App
+            mExplicitSignOut = true;
+            if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+                Games.signOut(mGoogleApiClient);
+                mGoogleApiClient.disconnect();
+            }
         }
+        buildGoogle();
+        buildView();
     }
 
     private void buildView() {
         //Build Buttons listeners
-        SignInButton mGooglSignInButton = (SignInButton)findViewById(R.id.sign_in_button);
+        SignInButton mGooglSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
         mGooglSignInButton.setSize(SignInButton.SIZE_WIDE);
         mGooglSignInButton.setOnClickListener(v -> attempLoginWithGoogle());
     }
@@ -68,6 +83,9 @@ public class WelcomeActivity extends AppCompatActivity implements
         startActivity(it);
     }
 
+    /**
+     * Build a Google API Client
+     */
     private void buildGoogle() {
 
         // Create the Googe Api Client with access to the Play Game services
@@ -82,24 +100,37 @@ public class WelcomeActivity extends AppCompatActivity implements
     private void attempLoginWithGoogle() {
         // start the asynchronous sign in flow
         mSignInClicked = true;
+        ((TextView) findViewById(R.id.information_label)).setText("... Conectando");
         mGoogleApiClient.connect();
     }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Toast.makeText(this, R.string.welcome_message, Toast.LENGTH_LONG).show();
-        try {
-            synchronized (this) {
-                //Tiempo de espera para que aparezca el mensaje de bienvenida
+        Player p = Games.Players.getCurrentPlayer(mGoogleApiClient);
+        synchronized (this) {
+            try {
                 wait(5000);
-                goToMenuActivity();
-
+                ((TextView) findViewById(R.id.information_label)).setText("Conectado! Bienvenido...");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        } catch (InterruptedException e) {
+        }
+        connectWithApi(p.getName());
+    }
+
+    private void connectWithApi(String name) {
+        String token = "Basic " + Base64.encodeToString(name.getBytes(), Base64.NO_WRAP);
+
+        retrofitControler = new RetrofitControler();
+        try {
+            Call<GoogleUser> listCall = new RetrofitControler().postConnection(token);
+            listCall.enqueue(new CallBackProgress<>(WelcomeActivity.this, WelcomeActivity.this));
+        } catch (Exception e) {
+            //TODO for depure
             e.printStackTrace();
         }
-
     }
+
 
     @Override
     public void onConnectionSuspended(int i) {
@@ -151,6 +182,8 @@ public class WelcomeActivity extends AppCompatActivity implements
     protected void onStart() {
         super.onStart();
         if (!mInSignInFlow && !mExplicitSignOut) {
+            ((TextView) findViewById(R.id.information_label)).setText("... Conectando");
+
             // auto sign in
             if (mGoogleApiClient != null && !mGoogleApiClient.isConnected()) {
                 mGoogleApiClient.connect();
@@ -158,24 +191,10 @@ public class WelcomeActivity extends AppCompatActivity implements
         }
     }
 
-    /**
-     * Called when you are no longer visible to the user.  You will next
-     * receive either {@link #onRestart}, {@link #onDestroy}, or nothing,
-     * depending on later user activity.
-     * <p>
-     * <p><em>Derived classes must call through to the super class's
-     * implementation of this method.  If they do not, an exception will be
-     * thrown.</em></p>
-     *
-     * @see #onRestart
-     * @see #onResume
-     * @see #onSaveInstanceState
-     * @see #onDestroy
-     */
     @Override
     protected void onStop() {
         super.onStop();
-        //mGoogleApiClient.disconnect();
+        ((TextView) findViewById(R.id.information_label)).setText("");
     }
 
     /**
@@ -187,6 +206,10 @@ public class WelcomeActivity extends AppCompatActivity implements
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from
+        //   GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             mSignInClicked = false;
             mResolvingConnectionFailure = false;
@@ -203,12 +226,27 @@ public class WelcomeActivity extends AppCompatActivity implements
                         requestCode, resultCode, R.string.signin_other_error);
             }
         } else if (requestCode == RC_SIGN_OUT) {
+
+            mExplicitSignOut = true;
             if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
                 Games.signOut(mGoogleApiClient);
                 mGoogleApiClient.disconnect();
             }
-            //Comando para matar el proceso de la aplicacion
-            //finishAffinity();
         }
+    }
+
+    @Override
+    public void onFinish(GoogleUser obj, String bearer) {
+        Bearer.setDefaults(Bearer.BEARER_KEY, bearer, this);
+        Bearer.setDefaultsInt(Bearer.USER_ID_KEY, obj.getId(), this);
+        Bearer.setDefaults(Bearer.USER_NAME_KEY, obj.getName(), this);
+
+        goToMenuActivity();
+
+    }
+
+    @Override
+    public void onFailure(Throwable t) {
+        Toast.makeText(this, R.string.connectToApiFailure, Toast.LENGTH_LONG);
     }
 }

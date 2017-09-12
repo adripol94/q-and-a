@@ -1,34 +1,27 @@
 package es.iesnervion.qa.ui.View;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
 
-import es.iesnervion.qa.Controller.RetrofitControler;
-import es.iesnervion.qa.Model.Bearer;
-import es.iesnervion.qa.Model.CallBackProgress;
-import es.iesnervion.qa.Model.Category;
-import es.iesnervion.qa.Model.GetImages;
-import es.iesnervion.qa.Model.Responser;
+import es.iesnervion.qa.controller.RetrofitControler;
+import es.iesnervion.qa.model.Bearer;
+import es.iesnervion.qa.model.CallBackProgress;
+import es.iesnervion.qa.model.Category;
+import es.iesnervion.qa.model.GetImages;
+import es.iesnervion.qa.model.Responser;
 import es.iesnervion.qa.R;
 import es.iesnervion.qa.ui.Adapter.CategoriaAdapter;
 import retrofit2.Call;
@@ -53,12 +46,7 @@ public class CategoriesActivity extends AppCompatActivity {
         //Start Flating button...
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorQuestions)));
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        fab.setOnClickListener(view -> finish());
 
         mRecyclerView = (RecyclerView)findViewById(R.id.rvCategorias);
 
@@ -66,7 +54,7 @@ public class CategoriesActivity extends AppCompatActivity {
 
         retrofitControler = new RetrofitControler();
         Call<List<Category>> categCall = retrofitControler.getListCategory(token);
-        categCall.enqueue(new CallBackProgress<List<Category>>(responseCategory, this));
+        categCall.enqueue(new CallBackProgress<>(responseCategory, this));
 
     }
 

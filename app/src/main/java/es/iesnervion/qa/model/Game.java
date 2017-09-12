@@ -1,14 +1,8 @@
-package es.iesnervion.qa.Model;
-
-import android.os.Parcel;
-import android.os.Parcelable;
+package es.iesnervion.qa.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import es.iesnervion.qa.ui.View.GamingActivity;
 
 /**
  * Created by adripol94 on 3/8/17.

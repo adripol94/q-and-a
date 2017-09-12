@@ -1,6 +1,5 @@
 package es.iesnervion.qa.ui.View;
 
-import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,9 +7,6 @@ import android.os.Bundle;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-
-import es.iesnervion.qa.Model.Bearer;
 import es.iesnervion.qa.R;
 import es.iesnervion.qa.ui.Transitions.TransitionInActivity;
 
@@ -21,7 +17,6 @@ public class MenuActivity extends AppCompatActivity {
     public TextView friends;
     public TextView questions;
     public TextView salir;
-    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +36,10 @@ public class MenuActivity extends AppCompatActivity {
 
         salir = (TextView) findViewById(R.id.txtSalir);
         salir.setOnClickListener(v -> {
-            Bearer.delDefaults(v.getContext());
-            setResult(Activity.RESULT_OK);
-            finishActivity(WelcomeActivity.RC_SIGN_OUT);
-            finish();
+            Intent newIntent = new Intent(this, WelcomeActivity.class);
+            newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(newIntent);
         });
 
         setting = (TextView) findViewById(R.id.txtSettings);

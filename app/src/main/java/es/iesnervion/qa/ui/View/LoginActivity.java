@@ -16,15 +16,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -33,31 +30,19 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.drive.Drive;
-import com.google.android.gms.games.Games;
-import com.google.example.games.basegameutils.BaseGameUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import es.iesnervion.qa.Controller.RetrofitControler;
-import es.iesnervion.qa.Model.Bearer;
-import es.iesnervion.qa.Model.CallBackProgress;
-import es.iesnervion.qa.Model.Responser;
-import es.iesnervion.qa.Model.User;
+import es.iesnervion.qa.controller.RetrofitControler;
+import es.iesnervion.qa.model.Bearer;
+import es.iesnervion.qa.model.CallBackProgress;
+import es.iesnervion.qa.model.Responser;
+import es.iesnervion.qa.model.User;
 import es.iesnervion.qa.R;
 import retrofit2.Call;
 
 import static android.Manifest.permission.READ_CONTACTS;
-import static android.content.ContentValues.TAG;
 
 /**
  * A login screen that offers login via email/password.
@@ -116,15 +101,12 @@ import static android.content.ContentValues.TAG;
         populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
+        mPasswordView.setOnEditorActionListener((textView, id, keyEvent) -> {
+            if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                attemptLogin();
+                return true;
             }
+            return false;
         });
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);

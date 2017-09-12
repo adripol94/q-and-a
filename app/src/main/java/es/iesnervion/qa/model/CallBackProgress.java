@@ -1,13 +1,8 @@
-package es.iesnervion.qa.Model;
+package es.iesnervion.qa.model;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
-import android.util.Log;
 import android.widget.Toast;
 
-import java.io.IOException;
-
-import es.iesnervion.qa.ui.View.CategoriesActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
