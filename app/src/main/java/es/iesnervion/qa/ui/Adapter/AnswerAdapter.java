@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import es.iesnervion.qa.Model.Answer;
-import es.iesnervion.qa.Model.ResponserAnswer;
+import es.iesnervion.qa.model.Answer;
+import es.iesnervion.qa.model.ResponserAnswer;
 import es.iesnervion.qa.R;
 
 /**

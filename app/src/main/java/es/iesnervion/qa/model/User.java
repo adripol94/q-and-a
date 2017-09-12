@@ -1,9 +1,7 @@
-package es.iesnervion.qa.Model;
+package es.iesnervion.qa.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import java.sql.Date;
 
 /**
  * Object de usuario, necesario para la conexión en la base de datos.

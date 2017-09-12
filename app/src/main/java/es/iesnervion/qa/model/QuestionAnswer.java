@@ -1,4 +1,4 @@
-package es.iesnervion.qa.Model;
+package es.iesnervion.qa.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

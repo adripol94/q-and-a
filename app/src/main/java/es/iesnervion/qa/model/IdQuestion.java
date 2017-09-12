@@ -1,4 +1,4 @@
-package es.iesnervion.qa.Model;
+package es.iesnervion.qa.model;
 
 import com.google.gson.annotations.SerializedName;
 

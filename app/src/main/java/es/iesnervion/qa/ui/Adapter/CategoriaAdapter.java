@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import es.iesnervion.qa.Model.Category;
+import es.iesnervion.qa.model.Category;
 import es.iesnervion.qa.R;
 import es.iesnervion.qa.ui.View.GamingActivity;
 
