@@ -10,7 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.iesnervion.qa.R;
 import es.iesnervion.qa.ui.View.BaseActivity;
@@ -25,7 +25,7 @@ public class TransitionInActivity extends BaseActivity {
     public static final String TRANSITION_EXPLODE = "EXPLODE";
     public static final String TRANSITION_EXPLODE_BOUNCE = "EXPLODE_BOUNCE";
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
     @Override
