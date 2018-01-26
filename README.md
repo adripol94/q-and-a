@@ -1,5 +1,5 @@
 # q-and-a
-[![Build Status](https://travis-ci.com/adripol94/q-and-a.svg?token=KPTW7ZDpLpWx2NwsernG&branch=master)](https://travis-ci.com/adripol94/q-and-a)
+[![Build Status](https://travis-ci.com/apolalca/q-and-a.svg?token=KPTW7ZDpLpWx2NwsernG&branch=master)](https://travis-ci.com/adripol94/q-and-a)
 
 Q&A es una aplicación diseñada con dos tipos de enfoque. Esta dispondrá de una parte de preguntas separadas
 por distintos generos (Matematicas, Lengua, Historía), la otra parte dará al jugador la posibilidad de crear un grupo de 
