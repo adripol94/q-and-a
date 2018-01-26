@@ -1,3 +1,6 @@
+sudo: required
+dist: trusty
+group: deprecated-2017Q4
 language: android
 jdk: oraclejdk7
 android:
@@ -15,4 +18,3 @@ android:
 
 script:
   - chmod +x ./gradlew
-group: deprecated-2017Q4
